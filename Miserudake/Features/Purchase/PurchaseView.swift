@@ -44,7 +44,16 @@ struct PurchaseView: View {
             .controlSize(.large)
             .disabled(purchaseManager.isWatermarkRemoved || purchaseManager.product == nil)
             .padding(.horizontal)
-            .padding(.bottom)
+
+            if !purchaseManager.isWatermarkRemoved {
+                Button("購入を復元") {
+                    Task { await purchaseManager.restorePurchases() }
+                }
+                .font(.footnote)
+                .padding(.bottom)
+            } else {
+                Spacer().frame(height: 8)
+            }
         }
         .navigationTitle("購入")
         .navigationBarTitleDisplayMode(.inline)

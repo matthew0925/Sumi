@@ -19,6 +19,7 @@
 		780B505C5B075D52848F3764 /* MaskingStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A7012FAB684FD408318EB4 /* MaskingStyle.swift */; };
 		842DD5750D5A689549E829D5 /* ImageMaskingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F969D432FDE55692687E8AAA /* ImageMaskingService.swift */; };
 		DB7B9E840E1AC5394B6E2854 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 657D7725B33B1DDBFD919B52 /* Assets.xcassets */; };
+		E12098AA04837D7F4B304A22 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF188BD2A4339C95B10015B9 /* OnboardingView.swift */; };
 		E639615AF32E63151F2173FB /* ExportPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF8027801351630C6728B99 /* ExportPreviewView.swift */; };
 		F299CA4175736A7D83347731 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379153147FA66E4BC00AC609 /* CameraCaptureView.swift */; };
 		F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */; };
@@ -36,6 +37,7 @@
 		6E1649140553413B4456F607 /* DocumentTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeView.swift; sourceTree = "<group>"; };
 		72036ED5286B56670FED0A96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		78345C70816C89A74E079E67 /* MaskingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingFlow.swift; sourceTree = "<group>"; };
+		AF188BD2A4339C95B10015B9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		C8F45E32CEB5655DE57C0403 /* MaskingStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyleView.swift; sourceTree = "<group>"; };
 		CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiserudakeApp.swift; sourceTree = "<group>"; };
@@ -96,6 +98,14 @@
 				C8F45E32CEB5655DE57C0403 /* MaskingStyleView.swift */,
 			);
 			path = MaskingStyle;
+			sourceTree = "<group>";
+		};
+		B10067696861A867F85F65DF /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				AF188BD2A4339C95B10015B9 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		C4DB28E35F3BF229D27EDF62 /* Products */ = {
@@ -162,6 +172,7 @@
 				05E146ACC9BE727F09ED92E4 /* Export */,
 				DDA4C83B954153C19A684CF3 /* Home */,
 				ADA9E9627BE8C2A85FEFAE83 /* MaskingStyle */,
+				B10067696861A867F85F65DF /* Onboarding */,
 				87F1A0575CD3017C5AFA28D9 /* Purchase */,
 			);
 			path = Features;
@@ -247,6 +258,7 @@
 				780B505C5B075D52848F3764 /* MaskingStyle.swift in Sources */,
 				35C0E0B38D397F4ED64D2486 /* MaskingStyleView.swift in Sources */,
 				1BE48A40944748CD8AC4D437 /* MiserudakeApp.swift in Sources */,
+				E12098AA04837D7F4B304A22 /* OnboardingView.swift in Sources */,
 				F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */,
 				08B1BA176E566345404A3654 /* PurchaseView.swift in Sources */,
 			);

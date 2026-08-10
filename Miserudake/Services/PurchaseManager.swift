@@ -35,6 +35,15 @@ final class PurchaseManager: ObservableObject {
         await refreshEntitlements()
     }
 
+    func restorePurchases() async {
+        do {
+            try await AppStore.sync()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        await refreshEntitlements()
+    }
+
     func purchase() async {
         guard let product else { return }
         do {

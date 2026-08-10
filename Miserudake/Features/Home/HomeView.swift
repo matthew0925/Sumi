@@ -5,6 +5,7 @@ struct HomeView: View {
     @EnvironmentObject private var flow: MaskingFlow
     @State private var showCamera = false
     @State private var photoPickerItem: PhotosPickerItem?
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     var body: some View {
         VStack(spacing: 32) {
@@ -60,6 +61,11 @@ struct HomeView: View {
                       let image = UIImage(data: data) else { return }
                 flow.startFlow(with: image)
                 photoPickerItem = nil
+            }
+        }
+        .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
+            OnboardingView {
+                hasCompletedOnboarding = true
             }
         }
     }
