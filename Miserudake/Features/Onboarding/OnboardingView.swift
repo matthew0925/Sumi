@@ -11,20 +11,20 @@ struct OnboardingView: View {
         OnboardingPage(
             icon: "text.viewfinder",
             colors: [Color(red: 0.30, green: 0.55, blue: 0.98), Color(red: 0.16, green: 0.32, blue: 0.78)],
-            title: "撮るだけで、隠す場所が分かる",
-            subtitle: "身分証を撮影すると、住所や生年月日など隠したい場所を自動で見つけます。"
+            title: "撮るだけで、隠す場所が見つかる",
+            subtitle: "身分証を撮影すると、住所や生年月日など\n隠したい場所を自動で検出します。"
         ),
         OnboardingPage(
             icon: "hand.tap.fill",
             colors: [Color(red: 0.98, green: 0.55, blue: 0.30), Color(red: 0.86, green: 0.30, blue: 0.24)],
             title: "最後はあなたの指で確認",
-            subtitle: "隠す場所はタップでON・OFF、範囲もかんたんに調整できます。"
+            subtitle: "隠す場所はタップでON・OFF、\n足りなければドラッグで追加できます。"
         ),
         OnboardingPage(
             icon: "lock.shield.fill",
             colors: [Color(red: 0.30, green: 0.78, blue: 0.60), Color(red: 0.14, green: 0.52, blue: 0.46)],
             title: "写真は、あなただけのもの",
-            subtitle: "処理はすべてこの端末の中だけ。誰にも送信されません。"
+            subtitle: "処理はすべてこの端末の中だけ。\n誰にも送信されません。"
         )
     ]
 
