@@ -196,14 +196,19 @@ private struct RegionOverlay: View {
             )
             .frame(width: rect.width, height: rect.height)
             .position(x: rect.midX, y: rect.midY)
-            .onTapGesture {
-                Haptics.light()
-                region.isEnabled.toggle()
-            }
-            .onLongPressGesture {
-                Haptics.warning()
-                onDelete()
-            }
+            // 親（画像全体）に付けたドラッグで新規領域を追加するジェスチャーより、
+            // 既存領域の上でのタップ・長押しを優先させるためhighPriorityGestureにする。
+            .highPriorityGesture(
+                LongPressGesture(minimumDuration: 0.5)
+                    .onEnded { _ in
+                        Haptics.warning()
+                        onDelete()
+                    }
+                    .exclusively(before: TapGesture().onEnded {
+                        Haptics.light()
+                        region.isEnabled.toggle()
+                    })
+            )
             .accessibilityLabel(region.isEnabled ? "マスク対象。タップで解除" : "マスク対象外。タップで追加")
             .accessibilityAddTraits(.isButton)
     }
