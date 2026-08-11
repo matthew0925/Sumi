@@ -6,6 +6,7 @@ struct HomeView: View {
     @State private var showCamera = false
     @State private var photoPickerItem: PhotosPickerItem?
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @State private var showSettings = false
 
     var body: some View {
         VStack(spacing: 32) {
@@ -66,6 +67,18 @@ struct HomeView: View {
         .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
             OnboardingView {
                 hasCompletedOnboarding = true
+            }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                }
             }
         }
     }

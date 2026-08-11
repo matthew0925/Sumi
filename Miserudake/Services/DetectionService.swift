@@ -9,8 +9,9 @@ enum DetectionService {
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: image.cgImageOrientation)
 
         let textRequest = VNRecognizeTextRequest()
-        textRequest.recognitionLevel = .fast
+        textRequest.recognitionLevel = .accurate
         textRequest.usesLanguageCorrection = false
+        textRequest.recognitionLanguages = ["ja-JP", "en-US"]
 
         let barcodeRequest = VNDetectBarcodesRequest()
 
@@ -19,18 +20,48 @@ enum DetectionService {
         var regions: [MaskRegion] = []
 
         if let textResults = textRequest.results {
-            regions += textResults.map {
-                MaskRegion(boundingBox: $0.boundingBox, kind: .text)
+            regions += textResults.map { observation in
+                let text = observation.topCandidates(1).first?.string ?? ""
+                return MaskRegion(
+                    boundingBox: observation.boundingBox,
+                    kind: .text,
+                    isEnabled: looksLikePersonalInformation(text)
+                )
             }
         }
 
         if let barcodeResults = barcodeRequest.results {
+            // QR/バーコードはマイナンバーカード等で個人情報を符号化していることが多いため、常に候補として有効にする。
             regions += barcodeResults.map {
-                MaskRegion(boundingBox: $0.boundingBox, kind: .barcode)
+                MaskRegion(boundingBox: $0.boundingBox, kind: .barcode, isEnabled: true)
             }
         }
 
         return regions
+    }
+
+    /// 生年月日・個人番号など「隠すべき可能性が高い」パターンにマッチするかどうかの簡易判定。
+    /// 意味の断定はせず、初期のON/OFF状態を決めるためだけに使う（最終判断は必ずユーザー確認）。
+    private static func looksLikePersonalInformation(_ text: String) -> Bool {
+        let digitsOnly = text.filter(\.isNumber)
+
+        // 12桁の個人番号（マイナンバー）や、和暦・西暦の生年月日表記に典型的な数字の並び。
+        if digitsOnly.count >= 8 {
+            return true
+        }
+
+        let addressKeywords = ["都", "道", "府", "県", "市", "区", "町", "村", "丁目", "番地"]
+        if addressKeywords.contains(where: text.contains) {
+            return true
+        }
+
+        let dateKeywords = ["年", "月", "日", "生"]
+        let dateKeywordHits = dateKeywords.filter(text.contains).count
+        if dateKeywordHits >= 2 {
+            return true
+        }
+
+        return false
     }
 }
 
