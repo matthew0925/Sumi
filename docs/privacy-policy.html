@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プライバシーポリシー | ミセルダケ</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    line-height: 1.8;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    color: #1c1f26;
+    background: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e8e8ea; background: #14161b; }
+    table, th, td { border-color: #3a3d45 !important; }
+    a { color: #7fb0f2; }
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.2rem; }
+  .updated { color: #767a85; font-size: 0.9rem; margin-bottom: 2rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #d8d8de; padding: 0.6rem 0.8rem; text-align: left; font-size: 0.95rem; }
+  th { background: rgba(127,127,127,0.08); }
+  ul { padding-left: 1.4rem; }
+  .note { margin-top: 3rem; padding: 1rem; border-radius: 8px; background: rgba(127,127,127,0.08); font-size: 0.85rem; }
+  a { color: #2563c9; }
+</style>
+</head>
+<body>
+<h1>プライバシーポリシー（ミセルダケ）</h1>
+<p class="updated">最終更新日：2026年8月11日</p>
+
+<p>「ミセルダケ」（以下「本アプリ」）は、本人確認書類・個人情報を含む画像を、端末内の処理だけでマスキングするアプリです。本ポリシーでは、本アプリが取り扱う情報について説明します。</p>
+
+<h2>1. 収集する情報</h2>
+<p>本アプリは、氏名・メールアドレス・電話番号などの個人を特定する情報を収集しません。アカウント登録機能もありません。</p>
+<p>撮影・選択した画像および検出結果は、<strong>本アプリの外部（サーバー等）へ送信されません</strong>。すべての画像処理は端末内でのみ行われます。</p>
+
+<h2>2. 画像・一時ファイルの取り扱い</h2>
+<ul>
+  <li>処理中の画像はアプリのサンドボックス内にのみ保持されます。</li>
+  <li>書き出し（保存・共有）が完了すると、処理用の一時データは速やかに破棄されます。</li>
+  <li>書き出し画像はEXIF等のメタデータ（位置情報を含む）を保持しない状態で新規に生成されます。</li>
+  <li>「カメラロールに保存」を選択した場合、画像は端末の写真ライブラリに保存されます。この保存先の管理はOS標準の写真アプリに準じます。</li>
+</ul>
+
+<h2>3. 権限について</h2>
+<p>本アプリが要求する権限は以下のみです。</p>
+<table>
+  <tr><th>権限</th><th>用途</th></tr>
+  <tr><td>カメラ</td><td>身分証などの書類を撮影するため</td></tr>
+  <tr><td>写真ライブラリの読み取り</td><td>カメラロールから既存の画像を選択するため</td></tr>
+  <tr><td>写真ライブラリへの書き込み</td><td>マスキング済みの画像を保存するため</td></tr>
+</table>
+<p>位置情報・連絡先・マイク等、上記以外の権限は要求しません。</p>
+
+<h2>4. 課金について</h2>
+<p>透かし解除の買い切り課金には<a href="https://www.revenuecat.com/" target="_blank" rel="noopener">RevenueCat</a>を利用しています。購入処理そのものはApple（StoreKit）を通じて行われ、RevenueCatは購入の検証・権利（エンタイトルメント）の管理のみを行います。この過程で、匿名の購入識別子・エンタイトルメント情報がRevenueCatのサーバーに送信されますが、氏名・住所等の書類の内容や画像そのものが送信されることはありません。詳細はRevenueCatの<a href="https://www.revenuecat.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>をご確認ください。</p>
+
+<h2>5. 第三者への提供</h2>
+<p>本アプリは、上記4.のRevenueCat（購入管理）およびApple（アプリの配布・課金基盤）を除き、いかなる第三者にも情報を提供しません。広告SDK・解析SDKの組み込みはありません。</p>
+
+<h2>6. お問い合わせ</h2>
+<p>本ポリシーに関するお問い合わせは、以下のメールアドレスまでご連絡ください。</p>
+<p><a href="mailto:miserudake.support@gmail.com">miserudake.support@gmail.com</a></p>
+
+<h2>7. 本ポリシーの変更</h2>
+<p>本アプリの機能追加・変更に伴い、本ポリシーを予告なく改定することがあります。重要な変更がある場合は、本アプリ内でお知らせします。</p>
+
+<div class="note">
+  このページは <a href="https://github.com/matthew0925/miserudake" target="_blank" rel="noopener">matthew0925/miserudake</a> リポジトリの <code>docs/privacy-policy.md</code> から生成されています。
+</div>
+</body>
+</html>
