@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var photoPickerItem: PhotosPickerItem?
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var showSettings = false
+    @State private var showCameraUnavailableAlert = false
 
     var body: some View {
         VStack(spacing: 32) {
@@ -22,7 +23,11 @@ struct HomeView: View {
 
             VStack(spacing: 16) {
                 Button {
-                    showCamera = true
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        showCamera = true
+                    } else {
+                        showCameraUnavailableAlert = true
+                    }
                 } label: {
                     Label("撮影する", systemImage: "camera.fill")
                         .frame(maxWidth: .infinity)
@@ -81,6 +86,11 @@ struct HomeView: View {
                 }
                 .accessibilityLabel("設定")
             }
+        }
+        .alert("カメラが利用できません", isPresented: $showCameraUnavailableAlert) {
+            Button("OK") {}
+        } message: {
+            Text("この端末ではカメラを利用できません。カメラロールから画像を選択してください。")
         }
     }
 }

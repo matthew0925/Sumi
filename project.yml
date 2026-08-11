@@ -32,5 +32,19 @@ targets:
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
     scheme:
-      testTargets: []
+      testTargets:
+        - MiserudakeTests
       gatherCoverageData: false
+  MiserudakeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: MiserudakeTests
+    dependencies:
+      - target: Miserudake
+    settings:
+      base:
+        SWIFT_VERSION: "5.0"
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Miserudake.app/Miserudake
+        BUNDLE_LOADER: $(TEST_HOST)

@@ -52,6 +52,27 @@ struct SettingsView: View {
                     .padding(.vertical, 4)
                 }
 
+                Section("サポート") {
+                    Link(destination: SupportConfig.privacyPolicyURL) {
+                        HStack {
+                            Text("プライバシーポリシー")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.footnote)
+                        }
+                    }
+                    if let mailURL = URL(string: "mailto:\(SupportConfig.supportEmail)") {
+                        Link(destination: mailURL) {
+                            HStack {
+                                Text("お問い合わせ")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.footnote)
+                            }
+                        }
+                    }
+                }
+
                 Section("このアプリについて") {
                     HStack {
                         Text("バージョン")

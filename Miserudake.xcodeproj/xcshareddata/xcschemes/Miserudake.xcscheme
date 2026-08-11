@@ -39,6 +39,17 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "699C37026C367CF3C641E94A"
+               BuildableName = "MiserudakeTests.xctest"
+               BlueprintName = "MiserudakeTests"
+               ReferencedContainer = "container:Miserudake.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

@@ -37,7 +37,8 @@ enum ImageMaskingService {
     }
 
     /// Visionの正規化座標（左下原点）をUIKit座標（左上原点）のピクセル矩形に変換する。
-    private static func convert(_ normalized: CGRect, to size: CGSize) -> CGRect {
+    /// テストから直接検証できるようinternalにしている。
+    static func convert(_ normalized: CGRect, to size: CGSize) -> CGRect {
         CGRect(
             x: normalized.origin.x * size.width,
             y: (1 - normalized.origin.y - normalized.height) * size.height,
