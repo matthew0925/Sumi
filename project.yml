@@ -13,6 +13,7 @@ targets:
       path: Miserudake/Info.plist
       properties:
         UILaunchScreen: {}
+        CFBundleDisplayName: ミセルダケ
         NSCameraUsageDescription: 身分証などの書類を撮影してマスキングするために使用します。
         NSPhotoLibraryUsageDescription: カメラロールから書類の画像を選択するために使用します。
         NSPhotoLibraryAddUsageDescription: マスキング済みの画像を保存するために使用します。

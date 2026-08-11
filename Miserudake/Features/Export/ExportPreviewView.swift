@@ -4,6 +4,9 @@ struct ExportPreviewView: View {
     @EnvironmentObject private var flow: MaskingFlow
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @State private var saveMessage: String?
+    @State private var zoomScale: CGFloat = 1
+    @State private var lastZoomScale: CGFloat = 1
+    @State private var didSave = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -11,7 +14,24 @@ struct ExportPreviewView: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
+                    .scaleEffect(zoomScale)
                     .padding(.horizontal)
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                zoomScale = min(max(lastZoomScale * value, 1), 4)
+                            }
+                            .onEnded { _ in
+                                lastZoomScale = zoomScale
+                            }
+                    )
+                    .onTapGesture(count: 2) {
+                        withAnimation(.snappy) {
+                            zoomScale = 1
+                            lastZoomScale = 1
+                        }
+                    }
+                    .accessibilityLabel("書き出しプレビュー。ダブルタップで拡大をリセット")
             }
 
             if !purchaseManager.isWatermarkRemoved {
@@ -23,14 +43,28 @@ struct ExportPreviewView: View {
             Spacer()
 
             VStack(spacing: 12) {
-                Button {
-                    saveToPhotos()
-                } label: {
-                    Text("保存する")
-                        .frame(maxWidth: .infinity)
+                HStack(spacing: 12) {
+                    Button {
+                        saveToPhotos()
+                    } label: {
+                        Label("保存する", systemImage: "square.and.arrow.down")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+
+                    if let image = renderedImage {
+                        ShareLink(
+                            item: Image(uiImage: image),
+                            preview: SharePreview("ミセルダケで作成した画像", image: Image(uiImage: image))
+                        ) {
+                            Image(systemName: "square.and.arrow.up")
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                    }
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
 
                 if !purchaseManager.isWatermarkRemoved {
                     Button {
@@ -41,6 +75,18 @@ struct ExportPreviewView: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                }
+
+                if didSave {
+                    Button {
+                        flow.reset()
+                    } label: {
+                        Text("最初からやり直す")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
                 }
             }
             .padding(.horizontal)
@@ -69,6 +115,8 @@ struct ExportPreviewView: View {
         guard let image = renderedImage else { return }
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         saveMessage = "カメラロールに保存しました。"
+        didSave = true
+        Haptics.success()
     }
 }
 

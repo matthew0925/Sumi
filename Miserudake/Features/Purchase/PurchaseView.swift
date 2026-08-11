@@ -33,6 +33,7 @@ struct PurchaseView: View {
                 Task {
                     await purchaseManager.purchase()
                     if purchaseManager.isWatermarkRemoved {
+                        Haptics.success()
                         flow.path.removeLast()
                     }
                 }

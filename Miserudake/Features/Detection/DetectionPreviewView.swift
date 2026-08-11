@@ -6,6 +6,8 @@ struct DetectionPreviewView: View {
     @State private var errorMessage: String?
     @State private var dragStart: CGPoint?
     @State private var dragCurrent: CGPoint?
+    @State private var initialRegions: [MaskRegion] = []
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 16) {
@@ -60,6 +62,7 @@ struct DetectionPreviewView: View {
                                 guard screenRect.width > 12, screenRect.height > 12 else { return }
                                 let normalized = geometry.normalizedRect(fromScreenRect: screenRect)
                                 flow.regions.append(MaskRegion(boundingBox: normalized, kind: .manual))
+                                Haptics.light()
                             }
                     )
                 }
@@ -79,13 +82,25 @@ struct DetectionPreviewView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
-                Button {
-                    flow.path.append(.maskingStyle)
-                } label: {
-                    Text("次へ")
-                        .frame(maxWidth: .infinity)
+                HStack(spacing: 12) {
+                    Button {
+                        Haptics.medium()
+                        flow.regions = initialRegions
+                    } label: {
+                        Label("リセット", systemImage: "arrow.counterclockwise")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(flow.regions == initialRegions)
+
+                    Button {
+                        flow.path.append(.maskingStyle)
+                    } label: {
+                        Text("次へ")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -107,7 +122,9 @@ struct DetectionPreviewView: View {
         guard let image = flow.sourceImage else { return }
         isDetecting = true
         do {
-            flow.regions = try await DetectionService.detectCandidates(in: image)
+            let detected = try await DetectionService.detectCandidates(in: image)
+            flow.regions = detected
+            initialRegions = detected
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -180,11 +197,15 @@ private struct RegionOverlay: View {
             .frame(width: rect.width, height: rect.height)
             .position(x: rect.midX, y: rect.midY)
             .onTapGesture {
+                Haptics.light()
                 region.isEnabled.toggle()
             }
             .onLongPressGesture {
+                Haptics.warning()
                 onDelete()
             }
+            .accessibilityLabel(region.isEnabled ? "マスク対象。タップで解除" : "マスク対象外。タップで追加")
+            .accessibilityAddTraits(.isButton)
     }
 }
 
