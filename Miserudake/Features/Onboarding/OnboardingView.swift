@@ -23,8 +23,8 @@ struct OnboardingView: View {
         OnboardingPage(
             icon: "lock.shield.fill",
             colors: [Color(red: 0.30, green: 0.78, blue: 0.60), Color(red: 0.14, green: 0.52, blue: 0.46)],
-            title: "写真は、外に出しません",
-            subtitle: "処理はすべてこの端末の中だけ。安心して使えます。"
+            title: "写真は、あなただけのもの",
+            subtitle: "処理はすべてこの端末の中だけ。誰にも送信されません。"
         )
     ]
 
