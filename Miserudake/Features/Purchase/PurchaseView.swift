@@ -22,8 +22,8 @@ struct PurchaseView: View {
                     .padding(.horizontal, 32)
             }
 
-            if let product = purchaseManager.product {
-                Text(product.displayPrice)
+            if let package = purchaseManager.package {
+                Text(package.storeProduct.localizedPriceString)
                     .font(.title.bold())
             }
 
@@ -43,7 +43,7 @@ struct PurchaseView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .disabled(purchaseManager.isWatermarkRemoved || purchaseManager.product == nil)
+            .disabled(purchaseManager.isWatermarkRemoved || purchaseManager.package == nil)
             .padding(.horizontal)
 
             if !purchaseManager.isWatermarkRemoved {
