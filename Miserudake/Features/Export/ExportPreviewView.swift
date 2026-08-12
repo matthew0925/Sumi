@@ -1,9 +1,11 @@
+import Photos
 import SwiftUI
 
 struct ExportPreviewView: View {
     @EnvironmentObject private var flow: MaskingFlow
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @State private var saveMessage: String?
+    @State private var saveFailed = false
     @State private var zoomScale: CGFloat = 1
     @State private var lastZoomScale: CGFloat = 1
     @State private var didSave = false
@@ -94,7 +96,7 @@ struct ExportPreviewView: View {
         }
         .navigationTitle("書き出し")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("保存しました", isPresented: .constant(saveMessage != nil)) {
+        .alert(saveFailed ? "保存できませんでした" : "保存しました", isPresented: .constant(saveMessage != nil)) {
             Button("OK") { saveMessage = nil }
         } message: {
             Text(saveMessage ?? "")
@@ -113,10 +115,22 @@ struct ExportPreviewView: View {
 
     private func saveToPhotos() {
         guard let image = renderedImage else { return }
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        saveMessage = "カメラロールに保存しました。"
-        didSave = true
-        Haptics.success()
+        PHPhotoLibrary.shared().performChanges {
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        } completionHandler: { success, error in
+            Task { @MainActor in
+                if success {
+                    saveFailed = false
+                    saveMessage = "カメラロールに保存しました。"
+                    didSave = true
+                    Haptics.success()
+                } else {
+                    saveFailed = true
+                    saveMessage = "写真ライブラリへのアクセスが許可されていないか、保存に失敗しました。設定アプリから写真へのアクセスを確認してください。"
+                    Haptics.warning()
+                }
+            }
+        }
     }
 }
 
