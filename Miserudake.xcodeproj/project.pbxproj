@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03A925C90CE21BCEF1724DCB /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF6297686ED6528BD208F91 /* SharedContainer.swift */; };
 		08B1BA176E566345404A3654 /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A272A64F4CF1758159C841B /* PurchaseView.swift */; };
 		1BE48A40944748CD8AC4D437 /* MiserudakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */; };
 		1D39518D66E35F15FD59245F /* ImageMaskingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3595521224549237863057 /* ImageMaskingServiceTests.swift */; };
@@ -14,11 +15,14 @@
 		1FD16980BE4ADF133C329063 /* SupportConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917F0029EFB9D79FB8CD066 /* SupportConfig.swift */; };
 		208336B7628150E1C0B15356 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0C255A3F8E0DD73F3BA8AE /* HomeView.swift */; };
 		293ECE2BA94AE07A83F86832 /* DocumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1FAD279A4589E7221F0805 /* DocumentType.swift */; };
+		30BD2757E77D80ECBA9F57AC /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF6297686ED6528BD208F91 /* SharedContainer.swift */; };
 		34A2C085A29C5A4E58B51AB7 /* DetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAFC509160B7D02162223D6 /* DetectionService.swift */; };
 		35C0E0B38D397F4ED64D2486 /* MaskingStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F45E32CEB5655DE57C0403 /* MaskingStyleView.swift */; };
 		38ADB90DA007244EE64A813B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4A573245C756BB9FDC88F6 /* SettingsView.swift */; };
+		40355DE8560E8FA1373D27F3 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E0846F11571D5BC7CC1F4E /* ShareViewController.swift */; };
 		677DE7B4B023794A6E4D7C78 /* MaskRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE72E63C3F3BCC7033B09552 /* MaskRegion.swift */; };
 		701700BE8FFED1A4F611B617 /* MaskingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78345C70816C89A74E079E67 /* MaskingFlow.swift */; };
+		724F367BE7BB1F3DE150D69D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FBE9792637E0D55AE1BA110 /* MainInterface.storyboard */; };
 		780B505C5B075D52848F3764 /* MaskingStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A7012FAB684FD408318EB4 /* MaskingStyle.swift */; };
 		80C13867F31B5E56390BE8DC /* MaskingFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7717C3D61A368037328F6A4 /* MaskingFlowTests.swift */; };
 		842DD5750D5A689549E829D5 /* ImageMaskingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F969D432FDE55692687E8AAA /* ImageMaskingService.swift */; };
@@ -31,11 +35,20 @@
 		F15853962A303A2F0CD6B13D /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F90324BAFB02C175E417B /* Haptics.swift */; };
 		F299CA4175736A7D83347731 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379153147FA66E4BC00AC609 /* CameraCaptureView.swift */; };
 		F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */; };
+		F73D402B2D010CFC916C483A /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F75E6B7E73AA1A9C1D862E29 /* DetectionPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD0EE7E952029304ED393E6 /* DetectionPreviewView.swift */; };
+		FA69646D977C56F4CC8FBD74 /* MiserudakeShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */; };
 		FCB9AE591579852E3C97E6C7 /* DocumentTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52A2B81908BE8E561C0760A /* DocumentTypeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		05ED97F7AA363910C7E915B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 66FDE5E149DF961E499E8B3A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF75C4894AEB1A85C26CAE4D;
+			remoteInfo = ShareExtension;
+		};
 		153D2C5C40E199242E2DF88A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 66FDE5E149DF961E499E8B3A /* Project object */;
@@ -45,8 +58,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3EE2E2BC0DD93ED928ADFAC6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F73D402B2D010CFC916C483A /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0A3595521224549237863057 /* ImageMaskingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMaskingServiceTests.swift; sourceTree = "<group>"; };
+		0FBE9792637E0D55AE1BA110 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		1A272A64F4CF1758159C841B /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
 		213DBE8E3D4A5AE18DABAC2A /* Miserudake.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Miserudake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BAFC509160B7D02162223D6 /* DetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionService.swift; sourceTree = "<group>"; };
@@ -56,21 +84,28 @@
 		4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MiserudakeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		501F90324BAFB02C175E417B /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		52979A3CE092D2101923C77F /* RevenueCatConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatConfig.swift; sourceTree = "<group>"; };
+		55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiserudakeShortcuts.swift; sourceTree = "<group>"; };
 		5E4A573245C756BB9FDC88F6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		657D7725B33B1DDBFD919B52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E1649140553413B4456F607 /* DocumentTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeView.swift; sourceTree = "<group>"; };
 		72036ED5286B56670FED0A96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		78345C70816C89A74E079E67 /* MaskingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingFlow.swift; sourceTree = "<group>"; };
+		A3D38A2E54859357CBD0EBF3 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		A917F0029EFB9D79FB8CD066 /* SupportConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportConfig.swift; sourceTree = "<group>"; };
 		AF188BD2A4339C95B10015B9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		C13874342D80C3CDAB028CC3 /* DetectionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionServiceTests.swift; sourceTree = "<group>"; };
+		C3BEFBD765EDA4EB862C8918 /* Miserudake.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Miserudake.entitlements; sourceTree = "<group>"; };
 		C8F45E32CEB5655DE57C0403 /* MaskingStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyleView.swift; sourceTree = "<group>"; };
 		CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiserudakeApp.swift; sourceTree = "<group>"; };
 		CE0C255A3F8E0DD73F3BA8AE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D2FF5A21E4BADE9B3E5E0D3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D52A2B81908BE8E561C0760A /* DocumentTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeTests.swift; sourceTree = "<group>"; };
 		D7717C3D61A368037328F6A4 /* MaskingFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingFlowTests.swift; sourceTree = "<group>"; };
+		E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3E0846F11571D5BC7CC1F4E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		E4A7012FAB684FD408318EB4 /* MaskingStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyle.swift; sourceTree = "<group>"; };
+		EBF6297686ED6528BD208F91 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
 		EFD0EE7E952029304ED393E6 /* DetectionPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionPreviewView.swift; sourceTree = "<group>"; };
 		F969D432FDE55692687E8AAA /* ImageMaskingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMaskingService.swift; sourceTree = "<group>"; };
 		FE72E63C3F3BCC7033B09552 /* MaskRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskRegion.swift; sourceTree = "<group>"; };
@@ -88,6 +123,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05BBAD2333E4672CC09256AF /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				EBF6297686ED6528BD208F91 /* SharedContainer.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		05E146ACC9BE727F09ED92E4 /* Export */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +158,17 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		3A21AF43D41AB9AA4BACD860 /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				D2FF5A21E4BADE9B3E5E0D3E /* Info.plist */,
+				0FBE9792637E0D55AE1BA110 /* MainInterface.storyboard */,
+				A3D38A2E54859357CBD0EBF3 /* ShareExtension.entitlements */,
+				E3E0846F11571D5BC7CC1F4E /* ShareViewController.swift */,
+			);
+			path = ShareExtension;
+			sourceTree = "<group>";
+		};
 		4E5C340559C8B50304A25D50 /* DocumentType */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +182,7 @@
 			children = (
 				78345C70816C89A74E079E67 /* MaskingFlow.swift */,
 				CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */,
+				55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */,
 				52979A3CE092D2101923C77F /* RevenueCatConfig.swift */,
 				A917F0029EFB9D79FB8CD066 /* SupportConfig.swift */,
 			);
@@ -174,6 +229,7 @@
 			children = (
 				213DBE8E3D4A5AE18DABAC2A /* Miserudake.app */,
 				4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */,
+				E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -193,10 +249,12 @@
 			children = (
 				657D7725B33B1DDBFD919B52 /* Assets.xcassets */,
 				72036ED5286B56670FED0A96 /* Info.plist */,
+				C3BEFBD765EDA4EB862C8918 /* Miserudake.entitlements */,
 				879303D4751FD93A8691A9C8 /* App */,
 				F7CE02C0475AAAB585DD762F /* Features */,
 				CA337BA069D117A5875EF84F /* Models */,
 				26A4617627F4971C635E7C84 /* Services */,
+				05BBAD2333E4672CC09256AF /* Shared */,
 			);
 			path = Miserudake;
 			sourceTree = "<group>";
@@ -223,6 +281,7 @@
 			children = (
 				CFD4E2D9CC3CA7D243E45F3A /* Miserudake */,
 				9938ABC58EDD9F3973A23472 /* MiserudakeTests */,
+				3A21AF43D41AB9AA4BACD860 /* ShareExtension */,
 				C4DB28E35F3BF229D27EDF62 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -252,10 +311,12 @@
 				E82AFAD822944B437C3E4EEF /* Sources */,
 				D9A07422E03628077F5D023F /* Resources */,
 				E84A66DC140576DD47E6A6ED /* Frameworks */,
+				3EE2E2BC0DD93ED928ADFAC6 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				59B3002DDDAC47E1BAA6808B /* PBXTargetDependency */,
 			);
 			name = Miserudake;
 			packageProductDependencies = (
@@ -282,6 +343,24 @@
 			productName = MiserudakeTests;
 			productReference = 4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CF75C4894AEB1A85C26CAE4D /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 317E098CCC92ECF157BFE456 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				2503D3FB48C94A2825799642 /* Sources */,
+				975E936D93D0600E30633589 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ShareExtension;
+			productReference = E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -313,11 +392,20 @@
 			targets = (
 				2E8534DCF50FFD2066FE322D /* Miserudake */,
 				699C37026C367CF3C641E94A /* MiserudakeTests */,
+				CF75C4894AEB1A85C26CAE4D /* ShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		975E936D93D0600E30633589 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				724F367BE7BB1F3DE150D69D /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D9A07422E03628077F5D023F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -329,6 +417,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2503D3FB48C94A2825799642 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40355DE8560E8FA1373D27F3 /* ShareViewController.swift in Sources */,
+				30BD2757E77D80ECBA9F57AC /* SharedContainer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E3FCE2418465D34CA9559E5D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,11 +455,13 @@
 				780B505C5B075D52848F3764 /* MaskingStyle.swift in Sources */,
 				35C0E0B38D397F4ED64D2486 /* MaskingStyleView.swift in Sources */,
 				1BE48A40944748CD8AC4D437 /* MiserudakeApp.swift in Sources */,
+				FA69646D977C56F4CC8FBD74 /* MiserudakeShortcuts.swift in Sources */,
 				E12098AA04837D7F4B304A22 /* OnboardingView.swift in Sources */,
 				F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */,
 				08B1BA176E566345404A3654 /* PurchaseView.swift in Sources */,
 				C117BFFD35173D95FB10F536 /* RevenueCatConfig.swift in Sources */,
 				38ADB90DA007244EE64A813B /* SettingsView.swift in Sources */,
+				03A925C90CE21BCEF1724DCB /* SharedContainer.swift in Sources */,
 				1FD16980BE4ADF133C329063 /* SupportConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +473,11 @@
 			isa = PBXTargetDependency;
 			target = 2E8534DCF50FFD2066FE322D /* Miserudake */;
 			targetProxy = 153D2C5C40E199242E2DF88A /* PBXContainerItemProxy */;
+		};
+		59B3002DDDAC47E1BAA6808B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF75C4894AEB1A85C26CAE4D /* ShareExtension */;
+			targetProxy = 05ED97F7AA363910C7E915B2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -400,6 +504,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Miserudake/Miserudake.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = Miserudake/Info.plist;
@@ -415,10 +520,31 @@
 			};
 			name = Release;
 		};
+		1A512308D9937AF3C8C45403 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake.ShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		270DFFE0F784FBA313BBCD10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Miserudake/Miserudake.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = Miserudake/Info.plist;
@@ -494,6 +620,26 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		77F11C0FFFEB0FDEC6E6778B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake.ShareExtension;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -574,6 +720,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		317E098CCC92ECF157BFE456 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77F11C0FFFEB0FDEC6E6778B /* Debug */,
+				1A512308D9937AF3C8C45403 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Miserudake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

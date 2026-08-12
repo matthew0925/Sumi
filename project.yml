@@ -16,6 +16,8 @@ targets:
     dependencies:
       - package: RevenueCat
         product: RevenueCat
+      - target: ShareExtension
+        embed: true
     info:
       path: Miserudake/Info.plist
       properties:
@@ -24,6 +26,15 @@ targets:
         NSCameraUsageDescription: 身分証などの書類を撮影してマスキングするために使用します。
         NSPhotoLibraryUsageDescription: カメラロールから書類の画像を選択するために使用します。
         NSPhotoLibraryAddUsageDescription: マスキング済みの画像を保存するために使用します。
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - miserudake
+            CFBundleURLName: com.matthew0925.miserudake
+    entitlements:
+      path: Miserudake/Miserudake.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.matthew0925.miserudake
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.miserudake
@@ -48,3 +59,32 @@ targets:
         GENERATE_INFOPLIST_FILE: true
         TEST_HOST: $(BUILT_PRODUCTS_DIR)/Miserudake.app/Miserudake
         BUNDLE_LOADER: $(TEST_HOST)
+  ShareExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ShareExtension
+      - path: Miserudake/Shared
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: ミセルダケで隠す
+        NSExtension:
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsImageWithMaxCount: 1
+          NSExtensionMainStoryboard: MainInterface
+          NSExtensionPointIdentifier: com.apple.share-services
+    entitlements:
+      path: ShareExtension/ShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.matthew0925.miserudake
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.miserudake.ShareExtension
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SKIP_INSTALL: true

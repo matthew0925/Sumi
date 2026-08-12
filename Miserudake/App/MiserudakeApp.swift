@@ -33,6 +33,24 @@ struct MiserudakeApp: App {
             }
             .environmentObject(flow)
             .environmentObject(purchaseManager)
+            .environmentObject(IntentBridge.shared)
+            .onOpenURL { url in
+                handle(url: url)
+            }
+        }
+    }
+
+    /// Share Extension（miserudake://share）とApp Intent双方の着地を1箇所で処理する。
+    @MainActor
+    private func handle(url: URL) {
+        guard url.scheme == "miserudake" else { return }
+        switch url.host {
+        case "share":
+            guard let data = SharedContainer.consumeHandoffImage(),
+                  let image = UIImage(data: data) else { return }
+            flow.startFlow(with: image)
+        default:
+            break
         }
     }
 }

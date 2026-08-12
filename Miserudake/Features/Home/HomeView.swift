@@ -3,6 +3,7 @@ import PhotosUI
 
 struct HomeView: View {
     @EnvironmentObject private var flow: MaskingFlow
+    @EnvironmentObject private var intentBridge: IntentBridge
     @State private var showCamera = false
     @State private var photoPickerItem: PhotosPickerItem?
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
@@ -23,11 +24,7 @@ struct HomeView: View {
 
             VStack(spacing: 16) {
                 Button {
-                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        showCamera = true
-                    } else {
-                        showCameraUnavailableAlert = true
-                    }
+                    openCameraIfAvailable()
                 } label: {
                     Label("撮影する", systemImage: "camera.fill")
                         .frame(maxWidth: .infinity)
@@ -91,6 +88,19 @@ struct HomeView: View {
             Button("OK") {}
         } message: {
             Text("この端末ではカメラを利用できません。カメラロールから画像を選択してください。")
+        }
+        .onChange(of: intentBridge.pendingAction) { _, action in
+            guard action == .openCamera else { return }
+            intentBridge.pendingAction = nil
+            openCameraIfAvailable()
+        }
+    }
+
+    private func openCameraIfAvailable() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            showCamera = true
+        } else {
+            showCameraUnavailableAlert = true
         }
     }
 }
