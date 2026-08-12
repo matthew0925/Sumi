@@ -41,10 +41,17 @@ enum DetectionService {
         return regions
     }
 
-    /// .accurateでの認識に失敗した場合（Simulator等でモデルの初期化に失敗するケースを含む）は
-    /// .fastにフォールバックする。両方失敗した場合は「検出0件」として扱い、
+    /// .accurateと.fastの両方で認識を試み、結果を合成する。
+    /// 実機実測で、片方の認識レベルだけでは住所や番号などの行を取りこぼす
+    /// ケースが確認されたため（Visionが1行を複数の断片に分割して認識し、
+    /// 断片ごとの情報量が閾値に届かない等）、両方の結果を合わせることで
+    /// 見逃しを減らす。同一箇所の重複はほぼ同じ矩形として弾く。
+    /// 片方が失敗（例: Simulatorでの.accurateモデル読み込み失敗）しても、
+    /// もう一方の結果は活かす。両方失敗した場合は「検出0件」として扱い、
     /// ユーザーが手動でマスク領域を追加できる状態に倒す（アプリを詰まらせない）。
     private static func recognizeText(handler: VNImageRequestHandler) -> [VNRecognizedTextObservation] {
+        var merged: [VNRecognizedTextObservation] = []
+
         for level in [VNRequestTextRecognitionLevel.accurate, .fast] {
             let request = VNRecognizeTextRequest()
             request.recognitionLevel = level
@@ -52,14 +59,20 @@ enum DetectionService {
             request.recognitionLanguages = ["ja-JP", "en-US"]
             do {
                 try handler.perform([request])
-                if let results = request.results {
-                    return results
+                for observation in request.results ?? [] {
+                    let isDuplicate = merged.contains {
+                        $0.boundingBox.isApproximately(observation.boundingBox)
+                    }
+                    if !isDuplicate {
+                        merged.append(observation)
+                    }
                 }
             } catch {
                 continue
             }
         }
-        return []
+
+        return merged
     }
 
     private static func detectBarcodes(handler: VNImageRequestHandler) -> [VNBarcodeObservation] {
@@ -78,8 +91,11 @@ enum DetectionService {
     static func looksLikePersonalInformation(_ text: String) -> Bool {
         let digitsOnly = text.filter(\.isNumber)
 
-        // 12桁の個人番号（マイナンバー）や、和暦・西暦の生年月日表記に典型的な数字の並び。
-        if digitsOnly.count >= 8 {
+        // 12桁の個人番号（マイナンバー）や免許証番号・生年月日などに典型的な数字の並び。
+        // Visionは長い番号を複数の断片に分割して認識することがあるため、
+        // 断片単位でも見逃さないよう閾値は低めに設定している
+        // （閾値を下げるほど誤検知は増えるが、隠し忘れの方が致命的なため安全側に倒す）。
+        if digitsOnly.count >= 4 {
             return true
         }
 
@@ -95,6 +111,17 @@ enum DetectionService {
         }
 
         return false
+    }
+}
+
+private extension CGRect {
+    /// 正規化座標系での「ほぼ同じ位置・大きさ」判定。
+    /// .accurateと.fastそれぞれの結果を合成する際、同一箇所の重複行を弾くために使う。
+    func isApproximately(_ other: CGRect, tolerance: CGFloat = 0.02) -> Bool {
+        abs(origin.x - other.origin.x) < tolerance
+            && abs(origin.y - other.origin.y) < tolerance
+            && abs(width - other.width) < tolerance
+            && abs(height - other.height) < tolerance
     }
 }
 
