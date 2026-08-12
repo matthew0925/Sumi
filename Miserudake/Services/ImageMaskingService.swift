@@ -33,7 +33,13 @@ enum ImageMaskingService {
                     cgContext.setFillColor(UIColor.black.cgColor)
                     cgContext.fill(rect)
                 case .mosaic:
-                    drawMosaic(from: normalizedSource, in: rect, context: cgContext)
+                    // モザイク描画が何らかの理由で失敗した場合、その領域が無加工のまま
+                    // 残ることだけは絶対に避けたいため、黒塗りにフォールバックする。
+                    // 「隠したつもりが隠れていなかった」を防ぐための最後の砦。
+                    if !drawMosaic(from: normalizedSource, in: rect, context: cgContext) {
+                        cgContext.setFillColor(UIColor.black.cgColor)
+                        cgContext.fill(rect)
+                    }
                 }
             }
 
@@ -54,8 +60,11 @@ enum ImageMaskingService {
         )
     }
 
-    private static func drawMosaic(from source: UIImage, in rect: CGRect, context: CGContext) {
-        guard let cgImage = source.cgImage else { return }
+    /// モザイクを描画できた場合はtrue、何らかの理由で描画できなかった場合はfalseを返す。
+    /// falseの場合、呼び出し側が黒塗りにフォールバックする。
+    @discardableResult
+    private static func drawMosaic(from source: UIImage, in rect: CGRect, context: CGContext) -> Bool {
+        guard let cgImage = source.cgImage else { return false }
 
         // source.cgImageはピクセル単位、rectはsource.size（ポイント単位）で
         // 計算されている。scaleが1でない画像でもズレないよう、ピクセル座標に変換してから切り出す。
@@ -68,20 +77,30 @@ enum ImageMaskingService {
             height: rect.height * scaleY
         ).integral.intersection(CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height))
 
-        guard !pixelRect.isEmpty, let cropped = cgImage.cropping(to: pixelRect) else { return }
+        guard !pixelRect.isEmpty, let cropped = cgImage.cropping(to: pixelRect) else { return false }
         let ciImage = CIImage(cgImage: cropped)
+
+        // ブロックサイズは矩形の短い方の辺を基準にする。住所行のように
+        // 横長・縦短の矩形で長い方（横幅）を基準にすると、ブロックサイズが
+        // 縦幅を大きく超えてしまい、CIPixellateが範囲外の情報を要求して
+        // 出力生成に失敗する（＝何も描画されず元の文字が透けて見える）ことがあった。
+        let shortSide = min(pixelRect.width, pixelRect.height)
+        let blockSize = max(4, shortSide * 0.2)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(ciImage, forKey: kCIInputImageKey)
-        filter?.setValue(max(rect.width, rect.height) * 0.12, forKey: kCIInputScaleKey)
+        filter?.setValue(blockSize, forKey: kCIInputScaleKey)
 
         let ciContext = CIContext()
-        guard let output = filter?.outputImage,
-              let renderedCG = ciContext.createCGImage(output, from: ciImage.extent) else { return }
+        guard let output = filter?.outputImage else { return false }
+        let renderExtent = output.extent.intersection(ciImage.extent)
+        guard !renderExtent.isEmpty, !renderExtent.isInfinite,
+              let renderedCG = ciContext.createCGImage(output, from: renderExtent) else { return false }
 
         context.saveGState()
         context.clip(to: rect)
         context.draw(renderedCG, in: rect)
         context.restoreGState()
+        return true
     }
 
     private static func drawWatermark(in size: CGSize) {
