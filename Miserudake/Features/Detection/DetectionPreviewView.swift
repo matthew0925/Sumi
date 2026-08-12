@@ -3,11 +3,10 @@ import SwiftUI
 struct DetectionPreviewView: View {
     @EnvironmentObject private var flow: MaskingFlow
     @State private var isDetecting = true
-    @State private var errorMessage: String?
     @State private var dragStart: CGPoint?
     @State private var dragCurrent: CGPoint?
     @State private var initialRegions: [MaskRegion] = []
-    @Environment(\.dismiss) private var dismiss
+    @State private var showNoMaskConfirmation = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -73,6 +72,14 @@ struct DetectionPreviewView: View {
                 ProgressView("個人情報らしき領域を検出中…")
                     .padding(.bottom)
             } else {
+                if flow.regions.isEmpty {
+                    Label("自動検出できませんでした。隠したい部分をドラッグで追加してください。", systemImage: "exclamationmark.triangle.fill")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.orange)
+                        .multilineTextAlignment(.leading)
+                        .padding(.horizontal)
+                }
+
                 VStack(spacing: 4) {
                     Text("\(flow.regions.filter { $0.isEnabled }.count)件の候補をマスク対象に選択中")
                     Text("タップでON/OFF・長押しで削除・ドラッグで領域を追加できます")
@@ -94,7 +101,11 @@ struct DetectionPreviewView: View {
                     .disabled(flow.regions == initialRegions)
 
                     Button {
-                        flow.path.append(.maskingStyle)
+                        if flow.regions.contains(where: { $0.isEnabled }) {
+                            flow.path.append(.maskingStyle)
+                        } else {
+                            showNoMaskConfirmation = true
+                        }
                     } label: {
                         Text("次へ")
                             .frame(maxWidth: .infinity)
@@ -111,23 +122,22 @@ struct DetectionPreviewView: View {
         .task {
             await runDetection()
         }
-        .alert("検出に失敗しました", isPresented: .constant(errorMessage != nil)) {
-            Button("OK") { errorMessage = nil }
+        .alert("マスク対象がありません", isPresented: $showNoMaskConfirmation) {
+            Button("戻って追加する", role: .cancel) {}
+            Button("このまま進む（何も隠さない）", role: .destructive) {
+                flow.path.append(.maskingStyle)
+            }
         } message: {
-            Text(errorMessage ?? "")
+            Text("有効なマスク領域が1件もありません。このまま書き出すと、隠すべき情報がそのまま見える状態で書き出されます。")
         }
     }
 
     private func runDetection() async {
         guard let image = flow.sourceImage else { return }
         isDetecting = true
-        do {
-            let detected = try await DetectionService.detectCandidates(in: image)
-            flow.regions = detected
-            initialRegions = detected
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+        let detected = await DetectionService.detectCandidates(in: image)
+        flow.regions = detected
+        initialRegions = detected
         isDetecting = false
     }
 }

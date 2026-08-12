@@ -6,46 +6,70 @@ import UIKit
 enum DetectionService {
     /// Visionの認識処理はCPU負荷が高く同期APIのため、呼び出し元（MainActor）を
     /// ブロックしないよう明示的にバックグラウンドタスクへ切り離して実行する。
-    static func detectCandidates(in image: UIImage) async throws -> [MaskRegion] {
-        try await Task.detached(priority: .userInitiated) {
-            try detectCandidatesSynchronously(in: image)
+    static func detectCandidates(in image: UIImage) async -> [MaskRegion] {
+        await Task.detached(priority: .userInitiated) {
+            detectCandidatesSynchronously(in: image)
         }.value
     }
 
-    private static func detectCandidatesSynchronously(in image: UIImage) throws -> [MaskRegion] {
+    private static func detectCandidatesSynchronously(in image: UIImage) -> [MaskRegion] {
         guard let cgImage = image.cgImage else { return [] }
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: image.cgImageOrientation)
 
-        let textRequest = VNRecognizeTextRequest()
-        textRequest.recognitionLevel = .accurate
-        textRequest.usesLanguageCorrection = false
-        textRequest.recognitionLanguages = ["ja-JP", "en-US"]
-
-        let barcodeRequest = VNDetectBarcodesRequest()
-
-        try handler.perform([textRequest, barcodeRequest])
+        // テキスト検出とバーコード検出は互いに独立させておく。
+        // 一方が失敗（例: Simulatorでの.accurateモデル読み込み失敗）しても、
+        // もう一方の結果は失わずに済むようにするため。
+        let textResults = recognizeText(handler: handler)
+        let barcodeResults = detectBarcodes(handler: handler)
 
         var regions: [MaskRegion] = []
 
-        if let textResults = textRequest.results {
-            regions += textResults.map { observation in
-                let text = observation.topCandidates(1).first?.string ?? ""
-                return MaskRegion(
-                    boundingBox: observation.boundingBox,
-                    kind: .text,
-                    isEnabled: looksLikePersonalInformation(text)
-                )
-            }
+        regions += textResults.map { observation in
+            let text = observation.topCandidates(1).first?.string ?? ""
+            return MaskRegion(
+                boundingBox: observation.boundingBox,
+                kind: .text,
+                isEnabled: looksLikePersonalInformation(text)
+            )
         }
 
-        if let barcodeResults = barcodeRequest.results {
-            // QR/バーコードはマイナンバーカード等で個人情報を符号化していることが多いため、常に候補として有効にする。
-            regions += barcodeResults.map {
-                MaskRegion(boundingBox: $0.boundingBox, kind: .barcode, isEnabled: true)
-            }
+        // QR/バーコードはマイナンバーカード等で個人情報を符号化していることが多いため、常に候補として有効にする。
+        regions += barcodeResults.map {
+            MaskRegion(boundingBox: $0.boundingBox, kind: .barcode, isEnabled: true)
         }
 
         return regions
+    }
+
+    /// .accurateでの認識に失敗した場合（Simulator等でモデルの初期化に失敗するケースを含む）は
+    /// .fastにフォールバックする。両方失敗した場合は「検出0件」として扱い、
+    /// ユーザーが手動でマスク領域を追加できる状態に倒す（アプリを詰まらせない）。
+    private static func recognizeText(handler: VNImageRequestHandler) -> [VNRecognizedTextObservation] {
+        for level in [VNRequestTextRecognitionLevel.accurate, .fast] {
+            let request = VNRecognizeTextRequest()
+            request.recognitionLevel = level
+            request.usesLanguageCorrection = false
+            request.recognitionLanguages = ["ja-JP", "en-US"]
+            do {
+                try handler.perform([request])
+                if let results = request.results {
+                    return results
+                }
+            } catch {
+                continue
+            }
+        }
+        return []
+    }
+
+    private static func detectBarcodes(handler: VNImageRequestHandler) -> [VNBarcodeObservation] {
+        let request = VNDetectBarcodesRequest()
+        do {
+            try handler.perform([request])
+            return request.results ?? []
+        } catch {
+            return []
+        }
     }
 
     /// 生年月日・個人番号など「隠すべき可能性が高い」パターンにマッチするかどうかの簡易判定。
