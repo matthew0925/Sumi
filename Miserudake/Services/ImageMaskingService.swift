@@ -10,13 +10,20 @@ enum ImageMaskingService {
         style: MaskingStyle,
         watermarked: Bool
     ) -> UIImage {
-        let size = source.size
+        // カメラロールの写真はEXIFの向き情報を持ち、source.cgImageは回転前の
+        // 生ピクセルのままのことが多い。黒塗り（source.draw経由、向きが自動で
+        // 補正される）は問題にならないが、モザイクはsource.cgImageを直接
+        // ピクセル座標で切り出すため、向きを先に焼き込んでおかないと
+        // Visionが返した矩形とズレて切り出しに失敗し、その領域だけ無加工の
+        // まま残ってしまう。先に正規化することで両スタイルの座標系を揃える。
+        let normalizedSource = source.normalizedOrientation()
+        let size = normalizedSource.size
         let format = UIGraphicsImageRendererFormat()
-        format.scale = source.scale
+        format.scale = normalizedSource.scale
         let renderer = UIGraphicsImageRenderer(size: size, format: format)
 
         return renderer.image { context in
-            source.draw(in: CGRect(origin: .zero, size: size))
+            normalizedSource.draw(in: CGRect(origin: .zero, size: size))
 
             let cgContext = context.cgContext
             for region in regions where region.isEnabled {
@@ -26,7 +33,7 @@ enum ImageMaskingService {
                     cgContext.setFillColor(UIColor.black.cgColor)
                     cgContext.fill(rect)
                 case .mosaic:
-                    drawMosaic(from: source, in: rect, context: cgContext)
+                    drawMosaic(from: normalizedSource, in: rect, context: cgContext)
                 }
             }
 
@@ -48,8 +55,20 @@ enum ImageMaskingService {
     }
 
     private static func drawMosaic(from source: UIImage, in rect: CGRect, context: CGContext) {
-        guard let cgImage = source.cgImage,
-              let cropped = cgImage.cropping(to: rect.integral) else { return }
+        guard let cgImage = source.cgImage else { return }
+
+        // source.cgImageはピクセル単位、rectはsource.size（ポイント単位）で
+        // 計算されている。scaleが1でない画像でもズレないよう、ピクセル座標に変換してから切り出す。
+        let scaleX = CGFloat(cgImage.width) / source.size.width
+        let scaleY = CGFloat(cgImage.height) / source.size.height
+        let pixelRect = CGRect(
+            x: rect.origin.x * scaleX,
+            y: rect.origin.y * scaleY,
+            width: rect.width * scaleX,
+            height: rect.height * scaleY
+        ).integral.intersection(CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height))
+
+        guard !pixelRect.isEmpty, let cropped = cgImage.cropping(to: pixelRect) else { return }
         let ciImage = CIImage(cgImage: cropped)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(ciImage, forKey: kCIInputImageKey)
@@ -79,5 +98,20 @@ enum ImageMaskingService {
             y: size.height - textSize.height - margin
         )
         attributed.draw(at: origin)
+    }
+}
+
+private extension UIImage {
+    /// EXIFの向き情報を実ピクセルに焼き込み、imageOrientationが常に.upな
+    /// 新しい画像として返す。以後cgImageをピクセル座標で直接操作しても
+    /// UIKit側の表示座標とズレなくなる。
+    func normalizedOrientation() -> UIImage {
+        guard imageOrientation != .up else { return self }
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
     }
 }
