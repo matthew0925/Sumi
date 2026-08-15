@@ -1,4 +1,4 @@
-# ミセルダケ
+# Sumi
 
 本人確認書類・個人情報を含む画像を、撮影するだけで自動マスキングするiOSアプリ。
 
@@ -13,6 +13,11 @@
 - フリーミアム（透かし入り無料、透かし解除は買い切り・StoreKit 2）
 
 詳細な企画・仕様は [docs/](docs/) を参照。
+
+## サポート
+
+- お問い合わせ: [sumi.support@gmail.com](mailto:sumi.support@gmail.com)
+- [プライバシーポリシー](docs/privacy-policy.md)
 
 ## 構成
 
@@ -41,8 +46,7 @@ xcodebuild -project Sumi.xcodeproj -scheme Sumi \
   -destination 'generic/platform=iOS Simulator' -configuration Debug build
 ```
 
-## 未着手
+## 今後の作業
 
 - App Store Connectで買い切り商品ID `com.matthew0925.miserudake.watermark_removal` を作成
 - 実機の身分証サンプルでの検出精度検証
-- アプリアイコン・アクセントカラーの用意
