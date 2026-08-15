@@ -59,14 +59,21 @@ struct HomeView: View {
         }
         .onChange(of: photoPickerItem) { _, newItem in
             Task {
-                guard let newItem,
-                      let data = try? await newItem.loadTransferable(type: Data.self),
-                      let image = UIImage(data: data) else { return }
-                flow.startFlow(with: image)
-                photoPickerItem = nil
+                guard let newItem else { return }
+                defer { photoPickerItem = nil }
+                do {
+                    guard let data = try await newItem.loadTransferable(type: Data.self),
+                          let image = MaskingFlow.preparedForProcessing(data: data) else {
+                        flow.shareImportErrorMessage = "選択した画像を読み込めませんでした。別の画像を選択してください。"
+                        return
+                    }
+                    flow.startFlow(with: image)
+                } catch {
+                    flow.shareImportErrorMessage = "画像の読み込みに失敗しました。写真へのアクセスを確認して、もう一度お試しください。"
+                }
             }
         }
-        .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
+        .fullScreenCover(isPresented: onboardingIsPresented) {
             OnboardingView {
                 hasCompletedOnboarding = true
             }
@@ -89,7 +96,7 @@ struct HomeView: View {
         } message: {
             Text("この端末ではカメラを利用できません。カメラロールから画像を選択してください。")
         }
-        .alert("読み込みに失敗しました", isPresented: .constant(flow.shareImportErrorMessage != nil)) {
+        .alert("読み込みに失敗しました", isPresented: importErrorIsPresented) {
             Button("OK") { flow.shareImportErrorMessage = nil }
         } message: {
             Text(flow.shareImportErrorMessage ?? "")
@@ -112,6 +119,24 @@ struct HomeView: View {
         } else {
             showCameraUnavailableAlert = true
         }
+    }
+
+    private var onboardingIsPresented: Binding<Bool> {
+        Binding(
+            get: { !hasCompletedOnboarding },
+            set: { isPresented in
+                if !isPresented { hasCompletedOnboarding = true }
+            }
+        )
+    }
+
+    private var importErrorIsPresented: Binding<Bool> {
+        Binding(
+            get: { flow.shareImportErrorMessage != nil },
+            set: { isPresented in
+                if !isPresented { flow.shareImportErrorMessage = nil }
+            }
+        )
     }
 }
 

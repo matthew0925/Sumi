@@ -24,4 +24,37 @@ struct ImageMaskingServiceTests {
         #expect(converted.origin.x == 900)
         #expect(abs(converted.origin.y) < 0.001)
     }
+
+    @Test("画像外へはみ出す正規化矩形は画像領域内に切り詰められる")
+    func clampsOutOfBoundsRegion() {
+        let converted = ImageMaskingService.convert(
+            CGRect(x: -0.2, y: 0.8, width: 0.5, height: 0.5),
+            to: CGSize(width: 1000, height: 500)
+        )
+
+        #expect(converted.origin.x == 0)
+        #expect(converted.origin.y == 0)
+        #expect(abs(converted.width - 300) < 0.001)
+        #expect(abs(converted.height - 100) < 0.001)
+    }
+
+    @Test("画像と交差しない矩形は空のマスクになる")
+    func rejectsRegionOutsideImage() {
+        let converted = ImageMaskingService.convert(
+            CGRect(x: 2, y: 2, width: 0.5, height: 0.5),
+            to: CGSize(width: 1000, height: 500)
+        )
+
+        #expect(converted.isEmpty)
+    }
+
+    @Test("不正な数値を含む矩形は空のマスクとして安全に扱う")
+    func rejectsNonFiniteRegion() {
+        let converted = ImageMaskingService.convert(
+            CGRect(x: .nan, y: 0, width: 0.5, height: 0.5),
+            to: CGSize(width: 1000, height: 500)
+        )
+
+        #expect(converted.isEmpty)
+    }
 }

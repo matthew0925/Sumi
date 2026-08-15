@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
+               BlueprintIdentifier = "3FDBC2EEE15EE523AACAB32A"
                BuildableName = "Sumi.app"
                BlueprintName = "Sumi"
                ReferencedContainer = "container:Sumi.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
+            BlueprintIdentifier = "3FDBC2EEE15EE523AACAB32A"
             BuildableName = "Sumi.app"
             BlueprintName = "Sumi"
             ReferencedContainer = "container:Sumi.xcodeproj">
@@ -44,7 +44,7 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "699C37026C367CF3C641E94A"
+               BlueprintIdentifier = "9E7A56A7986D75112B777489"
                BuildableName = "SumiTests.xctest"
                BlueprintName = "SumiTests"
                ReferencedContainer = "container:Sumi.xcodeproj">
@@ -68,7 +68,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
+            BlueprintIdentifier = "3FDBC2EEE15EE523AACAB32A"
             BuildableName = "Sumi.app"
             BlueprintName = "Sumi"
             ReferencedContainer = "container:Sumi.xcodeproj">
@@ -87,7 +87,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
+            BlueprintIdentifier = "3FDBC2EEE15EE523AACAB32A"
             BuildableName = "Sumi.app"
             BlueprintName = "Sumi"
             ReferencedContainer = "container:Sumi.xcodeproj">

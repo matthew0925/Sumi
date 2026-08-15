@@ -25,7 +25,7 @@ final class ShareViewController: UIViewController {
     private func handleSharedItem() {
         guard let item = extensionContext?.inputItems.first as? NSExtensionItem,
               let attachment = item.attachments?.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) }) else {
-            extensionContext?.completeRequest(returningItems: nil)
+            showError("共有された項目に画像が見つかりませんでした。")
             return
         }
 
@@ -52,10 +52,13 @@ final class ShareViewController: UIViewController {
 
             DispatchQueue.main.async {
                 guard let data else {
-                    self?.extensionContext?.completeRequest(returningItems: nil)
+                    self?.showError("画像を読み込めませんでした。別の画像でお試しください。")
                     return
                 }
-                SharedContainer.writeHandoffImage(data)
+                guard SharedContainer.writeHandoffImage(data) else {
+                    self?.showError("画像をSumiへ渡せませんでした。App Groupの設定を確認してください。")
+                    return
+                }
                 self?.openHostApp()
             }
         }
@@ -66,8 +69,26 @@ final class ShareViewController: UIViewController {
             extensionContext?.completeRequest(returningItems: nil)
             return
         }
-        extensionContext?.open(url) { [weak self] _ in
-            self?.extensionContext?.completeRequest(returningItems: nil)
+        extensionContext?.open(url) { [weak self] didOpen in
+            guard let self else { return }
+            if didOpen {
+                self.extensionContext?.completeRequest(returningItems: nil)
+            } else {
+                self.showError("Sumiを開けませんでした。アプリを直接開いて、もう一度お試しください。")
+            }
         }
+    }
+
+    private func showError(_ message: String) {
+        spinner.stopAnimating()
+        let alert = UIAlertController(title: "共有できませんでした", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "閉じる", style: .default) { [weak self] _ in
+            self?.extensionContext?.cancelRequest(withError: NSError(
+                domain: "com.matthew0925.sumi.ShareExtension",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: message]
+            ))
+        })
+        present(alert, animated: true)
     }
 }

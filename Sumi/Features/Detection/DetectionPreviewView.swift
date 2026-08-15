@@ -143,6 +143,7 @@ struct DetectionPreviewView: View {
         guard let image = flow.sourceImage else { return }
         isDetecting = true
         let detected = await DetectionService.detectCandidates(in: image)
+        guard !Task.isCancelled, flow.sourceImage === image else { return }
         flow.regions = detected
         initialRegions = detected
         isDetecting = false
@@ -187,14 +188,13 @@ private struct ImageDisplayGeometry {
         let size = fittedSize
         let origin = offset
         guard size.width > 0, size.height > 0 else { return .zero }
-        let x = (rect.origin.x - origin.x) / size.width
-        let y = 1 - (rect.origin.y - origin.y + rect.height) / size.height
-        return CGRect(
-            x: min(max(x, 0), 1),
-            y: min(max(y, 0), 1),
-            width: min(rect.width / size.width, 1),
-            height: min(rect.height / size.height, 1)
+        let normalized = CGRect(
+            x: (rect.origin.x - origin.x) / size.width,
+            y: 1 - (rect.origin.y - origin.y + rect.height) / size.height,
+            width: rect.width / size.width,
+            height: rect.height / size.height
         )
+        return MaskRegion.clampedToUnitSquare(normalized)
     }
 }
 

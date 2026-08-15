@@ -46,8 +46,11 @@ struct SumiApp: App {
         guard url.scheme == "sumi" else { return }
         switch url.host {
         case "share":
-            guard let data = SharedContainer.consumeHandoffImage() else { return }
-            guard let image = UIImage(data: data) else {
+            guard let data = SharedContainer.consumeHandoffImage() else {
+                flow.shareImportErrorMessage = "共有された画像を受け取れませんでした。共有メニューからもう一度お試しください。"
+                return
+            }
+            guard let image = MaskingFlow.preparedForProcessing(data: data) else {
                 flow.shareImportErrorMessage = "共有された画像を読み込めませんでした。もう一度お試しください。"
                 return
             }

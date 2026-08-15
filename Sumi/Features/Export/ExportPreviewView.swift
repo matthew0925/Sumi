@@ -103,7 +103,7 @@ struct ExportPreviewView: View {
         }
         .navigationTitle("書き出し")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(saveFailed ? "保存できませんでした" : "保存しました", isPresented: .constant(saveMessage != nil)) {
+        .alert(saveFailed ? "保存できませんでした" : "保存しました", isPresented: saveAlertIsPresented) {
             Button("OK") { saveMessage = nil }
         } message: {
             Text(saveMessage ?? "")
@@ -122,22 +122,38 @@ struct ExportPreviewView: View {
 
     private func saveToPhotos() {
         guard let image = renderedImage else { return }
-        PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: image)
-        } completionHandler: { success, error in
-            Task { @MainActor in
-                if success {
-                    saveFailed = false
-                    saveMessage = "カメラロールに保存しました。"
-                    didSave = true
-                    Haptics.success()
-                } else {
-                    saveFailed = true
-                    saveMessage = "写真ライブラリへのアクセスが許可されていないか、保存に失敗しました。設定アプリから写真へのアクセスを確認してください。"
-                    Haptics.warning()
+        Task {
+            let authorization = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
+            guard authorization == .authorized || authorization == .limited else {
+                saveFailed = true
+                saveMessage = "写真への追加が許可されていません。設定アプリからSumiの写真アクセスを許可してください。"
+                Haptics.warning()
+                return
+            }
+
+            do {
+                try await PHPhotoLibrary.shared().performChanges {
+                    PHAssetChangeRequest.creationRequestForAsset(from: image)
                 }
+                saveFailed = false
+                saveMessage = "カメラロールに保存しました。"
+                didSave = true
+                Haptics.success()
+            } catch {
+                saveFailed = true
+                saveMessage = "画像の保存に失敗しました。空き容量と写真へのアクセスを確認してください。"
+                Haptics.warning()
             }
         }
+    }
+
+    private var saveAlertIsPresented: Binding<Bool> {
+        Binding(
+            get: { saveMessage != nil },
+            set: { isPresented in
+                if !isPresented { saveMessage = nil }
+            }
+        )
     }
 }
 

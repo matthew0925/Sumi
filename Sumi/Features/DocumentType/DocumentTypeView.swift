@@ -7,7 +7,7 @@ struct DocumentTypeView: View {
     var body: some View {
         List {
             Section {
-                Text("書類の種類を選ぶと、隠すべき項目の初期候補を絞り込めます。あとで手動でも調整できます。")
+                Text("書類の種類ごとに、一般的によく隠される項目を確認できます。検出結果は次の画面で手動調整できます。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }

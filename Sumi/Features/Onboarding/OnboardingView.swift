@@ -1,141 +1,53 @@
 import SwiftUI
 
-/// 初回起動時にのみ表示するカルーセル形式のオンボーディング。
-/// 「裏側の仕組み」ではなく、ユーザー視点での価値（何が嬉しいか）を1画面1メッセージで伝える。
 struct OnboardingView: View {
     let onFinish: () -> Void
-
     @State private var page = 0
-
-    private let pages: [OnboardingPage] = [
-        OnboardingPage(
-            icon: "text.viewfinder",
-            colors: [Color(red: 0.30, green: 0.55, blue: 0.98), Color(red: 0.16, green: 0.32, blue: 0.78)],
-            title: "撮るだけで、隠す場所が見つかる",
-            subtitle: "身分証を撮影すると、\n住所や生年月日など隠したい場所を自動で検出します。"
-        ),
-        OnboardingPage(
-            icon: "hand.tap.fill",
-            colors: [Color(red: 0.98, green: 0.55, blue: 0.30), Color(red: 0.86, green: 0.30, blue: 0.24)],
-            title: "最後は、あなたの指で確認",
-            subtitle: "隠す場所はタップで選べて、\n足りなければドラッグで追加できます。"
-        ),
-        OnboardingPage(
-            icon: "lock.shield.fill",
-            colors: [Color(red: 0.30, green: 0.78, blue: 0.60), Color(red: 0.14, green: 0.52, blue: 0.46)],
-            title: "写真は、あなただけのもの",
-            subtitle: "端末内で暗号化されたまま処理され、\n外部に送信されることはありません。"
-        )
+    private let pages = [
+        OnboardingPage(icon: "viewfinder", title: "撮るだけで、候補を見つける", subtitle: "住所や生年月日など、隠したい部分を端末内で検出します。"),
+        OnboardingPage(icon: "hand.draw.fill", title: "最後は、自分の目で確認", subtitle: "候補をタップで選び、足りない場所は指で追加できます。"),
+        OnboardingPage(icon: "lock.shield.fill", title: "写真は、端末の外へ出さない", subtitle: "アカウント登録なし。画像処理はこの端末の中だけで完結します。")
     ]
 
     var body: some View {
-        ZStack(alignment: .top) {
-            TabView(selection: $page) {
-                ForEach(Array(pages.enumerated()), id: \.offset) { index, item in
-                    OnboardingPageView(page: item)
-                        .tag(index)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .ignoresSafeArea()
-
-            HStack {
-                Spacer()
-                if page < pages.count - 1 {
-                    Button("スキップ") { onFinish() }
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.85))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                }
-            }
-            .padding(.top, 8)
-            .padding(.trailing, 8)
-
-            VStack {
-                Spacer()
-
+        ZStack {
+            SumiTheme.background.ignoresSafeArea()
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Sumi").font(.title2.bold()).foregroundStyle(SumiTheme.ink); Spacer()
+                    if page < pages.count - 1 { Button("スキップ", action: onFinish).foregroundStyle(SumiTheme.mutedInk) }
+                }.padding(24)
+                TabView(selection: $page) {
+                    ForEach(Array(pages.enumerated()), id: \.offset) { index, item in
+                        VStack(spacing: 34) {
+                            Spacer()
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 42, style: .continuous).fill(SumiTheme.paperRaised)
+                                    .frame(width: 220, height: 220).shadow(color: SumiTheme.ink.opacity(0.10), radius: 24, y: 12)
+                                Image(systemName: item.icon).font(.system(size: 76, weight: .light))
+                                    .foregroundStyle(index == 2 ? SumiTheme.teal : SumiTheme.ink)
+                            }
+                            VStack(spacing: 12) {
+                                Text(item.title).font(.title.bold()).foregroundStyle(SumiTheme.ink).multilineTextAlignment(.center)
+                                Text(item.subtitle).foregroundStyle(SumiTheme.mutedInk).multilineTextAlignment(.center)
+                            }.padding(.horizontal, 30)
+                            Spacer()
+                        }.tag(index)
+                    }
+                }.tabViewStyle(.page(indexDisplayMode: .never))
                 HStack(spacing: 8) {
                     ForEach(pages.indices, id: \.self) { index in
-                        Capsule()
-                            .fill(.white.opacity(index == page ? 1 : 0.35))
-                            .frame(width: index == page ? 20 : 6, height: 6)
-                            .animation(.snappy, value: page)
+                        Capsule().fill(index == page ? SumiTheme.ink : SumiTheme.ink.opacity(0.18)).frame(width: index == page ? 24 : 7, height: 7)
                     }
-                }
-                .padding(.bottom, 24)
-
+                }.padding(.bottom, 22)
                 Button {
-                    if page < pages.count - 1 {
-                        withAnimation(.snappy) { page += 1 }
-                    } else {
-                        onFinish()
-                    }
-                } label: {
-                    Text(page < pages.count - 1 ? "次へ" : "はじめる")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
-                }
-                .buttonStyle(.plain)
-                .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .foregroundStyle(pages[page].colors.last ?? .black)
-                .padding(.horizontal, 32)
-                .padding(.bottom, 24)
+                    if page < pages.count - 1 { withAnimation(.snappy) { page += 1 } } else { onFinish() }
+                } label: { Text(page < pages.count - 1 ? "次へ" : "Sumiをはじめる").frame(maxWidth: .infinity) }
+                    .buttonStyle(SumiPrimaryButtonStyle()).padding(.horizontal, 24).padding(.bottom, 28)
             }
-        }
-        .background(
-            LinearGradient(colors: pages[page].colors, startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-                .animation(.easeInOut(duration: 0.4), value: page)
-        )
-    }
-}
-
-private struct OnboardingPage {
-    let icon: String
-    let colors: [Color]
-    let title: String
-    let subtitle: String
-}
-
-private struct OnboardingPageView: View {
-    let page: OnboardingPage
-
-    var body: some View {
-        VStack(spacing: 28) {
-            Spacer()
-
-            ZStack {
-                Circle()
-                    .fill(.white.opacity(0.16))
-                    .frame(width: 176, height: 176)
-                Circle()
-                    .fill(.white.opacity(0.22))
-                    .frame(width: 128, height: 128)
-                Image(systemName: page.icon)
-                    .font(.system(size: 52, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-
-            VStack(spacing: 12) {
-                Text(page.title)
-                    .font(.title.bold())
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                Text(page.subtitle)
-                    .font(.body)
-                    .foregroundStyle(.white.opacity(0.85))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 36)
-            }
-
-            Spacer()
-            Spacer()
         }
     }
 }
 
-#Preview {
-    OnboardingView(onFinish: {})
-}
+private struct OnboardingPage { let icon: String; let title: String; let subtitle: String }
+#Preview { OnboardingView(onFinish: {}) }

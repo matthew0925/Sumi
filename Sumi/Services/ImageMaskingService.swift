@@ -52,7 +52,8 @@ enum ImageMaskingService {
     /// Visionの正規化座標（左下原点）をUIKit座標（左上原点）のピクセル矩形に変換する。
     /// テストから直接検証できるようinternalにしている。
     static func convert(_ normalized: CGRect, to size: CGSize) -> CGRect {
-        CGRect(
+        let normalized = MaskRegion.clampedToUnitSquare(normalized)
+        return CGRect(
             x: normalized.origin.x * size.width,
             y: (1 - normalized.origin.y - normalized.height) * size.height,
             width: normalized.width * size.width,
@@ -116,6 +117,14 @@ enum ImageMaskingService {
             x: size.width - textSize.width - margin,
             y: size.height - textSize.height - margin
         )
+        let backgroundRect = CGRect(
+            x: origin.x - margin,
+            y: origin.y - margin * 0.5,
+            width: textSize.width + margin * 2,
+            height: textSize.height + margin
+        )
+        UIColor.black.withAlphaComponent(0.35).setFill()
+        UIBezierPath(roundedRect: backgroundRect, cornerRadius: margin * 0.5).fill()
         attributed.draw(at: origin)
     }
 }

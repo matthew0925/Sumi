@@ -15,16 +15,26 @@ enum SharedContainer {
     }
 
     /// Share Extension側から呼ぶ。共有された画像をApp Groupコンテナに書き込む。
-    static func writeHandoffImage(_ data: Data) {
-        guard let url = handoffImageURL else { return }
-        try? data.write(to: url, options: .atomic)
+    @discardableResult
+    static func writeHandoffImage(_ data: Data) -> Bool {
+        guard !data.isEmpty, let url = handoffImageURL else { return false }
+        do {
+            try data.write(to: url, options: [.atomic, .completeFileProtection])
+            return true
+        } catch {
+            return false
+        }
     }
 
     /// アプリ本体側から呼ぶ。渡された画像を読み込み、読み込み後は即座に削除する。
     static func consumeHandoffImage() -> Data? {
         guard let url = handoffImageURL,
               let data = try? Data(contentsOf: url) else { return nil }
-        try? FileManager.default.removeItem(at: url)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            return nil
+        }
         return data
     }
 }
