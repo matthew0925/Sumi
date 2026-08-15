@@ -17,6 +17,13 @@ struct ExportPreviewView: View {
                     .resizable()
                     .scaledToFit()
                     .scaleEffect(zoomScale)
+                    .padding(12)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(Color(uiColor: .separator), lineWidth: 0.5)
+                    }
                     .padding(.horizontal)
                     .gesture(
                         MagnificationGesture()

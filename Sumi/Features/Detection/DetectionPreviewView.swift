@@ -15,6 +15,8 @@ struct DetectionPreviewView: View {
                     let geometry = ImageDisplayGeometry(containerSize: proxy.size, imageSize: image.size)
 
                     ZStack(alignment: .topLeading) {
+                        Color(uiColor: .secondarySystemBackground)
+
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
@@ -64,6 +66,11 @@ struct DetectionPreviewView: View {
                                 Haptics.light()
                             }
                     )
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .stroke(Color(uiColor: .separator), lineWidth: 0.5)
                 }
                 .padding(.horizontal)
             }
