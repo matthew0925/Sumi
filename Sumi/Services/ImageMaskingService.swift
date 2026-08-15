@@ -104,7 +104,7 @@ enum ImageMaskingService {
     }
 
     private static func drawWatermark(in size: CGSize) {
-        let text = "Miserudake"
+        let text = "Sumi"
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: size.width * 0.035, weight: .semibold),
             .foregroundColor: UIColor.white.withAlphaComponent(0.6)

@@ -1,4 +1,4 @@
-name: Miserudake
+name: Sumi
 options:
   bundleIdPrefix: com.matthew0925
   deploymentTarget:
@@ -8,18 +8,18 @@ packages:
     url: https://github.com/RevenueCat/purchases-ios
     from: 5.20.0
 targets:
-  Miserudake:
+  Sumi:
     type: application
     platform: iOS
     sources:
-      - path: Miserudake
+      - path: Sumi
     dependencies:
       - package: RevenueCat
         product: RevenueCat
       - target: ShareExtension
         embed: true
     info:
-      path: Miserudake/Info.plist
+      path: Sumi/Info.plist
       properties:
         UILaunchScreen: {}
         CFBundleDisplayName: ミセルダケ
@@ -31,7 +31,7 @@ targets:
               - miserudake
             CFBundleURLName: com.matthew0925.miserudake
     entitlements:
-      path: Miserudake/Miserudake.entitlements
+      path: Sumi/Sumi.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.matthew0925.miserudake
@@ -44,27 +44,27 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
     scheme:
       testTargets:
-        - MiserudakeTests
+        - SumiTests
       gatherCoverageData: false
-  MiserudakeTests:
+  SumiTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - path: MiserudakeTests
+      - path: SumiTests
     dependencies:
-      - target: Miserudake
+      - target: Sumi
     settings:
       base:
         SWIFT_VERSION: "5.0"
         GENERATE_INFOPLIST_FILE: true
-        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Miserudake.app/Miserudake
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Sumi.app/Sumi
         BUNDLE_LOADER: $(TEST_HOST)
   ShareExtension:
     type: app-extension
     platform: iOS
     sources:
       - path: ShareExtension
-      - path: Miserudake/Shared
+      - path: Sumi/Shared
     info:
       path: ShareExtension/Info.plist
       properties:

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		03A925C90CE21BCEF1724DCB /* SharedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF6297686ED6528BD208F91 /* SharedContainer.swift */; };
 		08B1BA176E566345404A3654 /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A272A64F4CF1758159C841B /* PurchaseView.swift */; };
-		1BE48A40944748CD8AC4D437 /* MiserudakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */; };
+		1BE48A40944748CD8AC4D437 /* SumiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCC3D35D9A8F34477675618 /* SumiApp.swift */; };
 		1D39518D66E35F15FD59245F /* ImageMaskingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3595521224549237863057 /* ImageMaskingServiceTests.swift */; };
 		1DE6A90C30CC67BB7FBDA783 /* DocumentTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1649140553413B4456F607 /* DocumentTypeView.swift */; };
 		1FD16980BE4ADF133C329063 /* SupportConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A917F0029EFB9D79FB8CD066 /* SupportConfig.swift */; };
@@ -37,7 +37,7 @@
 		F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */; };
 		F73D402B2D010CFC916C483A /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F75E6B7E73AA1A9C1D862E29 /* DetectionPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD0EE7E952029304ED393E6 /* DetectionPreviewView.swift */; };
-		FA69646D977C56F4CC8FBD74 /* MiserudakeShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */; };
+		FA69646D977C56F4CC8FBD74 /* SumiShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FAB182A9FFEDA9A57FAFCA /* SumiShortcuts.swift */; };
 		FCB9AE591579852E3C97E6C7 /* DocumentTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52A2B81908BE8E561C0760A /* DocumentTypeTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,7 +54,7 @@
 			containerPortal = 66FDE5E149DF961E499E8B3A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2E8534DCF50FFD2066FE322D;
-			remoteInfo = Miserudake;
+			remoteInfo = Sumi;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -76,15 +76,15 @@
 		0A3595521224549237863057 /* ImageMaskingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMaskingServiceTests.swift; sourceTree = "<group>"; };
 		0FBE9792637E0D55AE1BA110 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		1A272A64F4CF1758159C841B /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
-		213DBE8E3D4A5AE18DABAC2A /* Miserudake.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Miserudake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		213DBE8E3D4A5AE18DABAC2A /* Sumi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Sumi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BAFC509160B7D02162223D6 /* DetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionService.swift; sourceTree = "<group>"; };
 		379153147FA66E4BC00AC609 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		3B1FAD279A4589E7221F0805 /* DocumentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentType.swift; sourceTree = "<group>"; };
 		3CF8027801351630C6728B99 /* ExportPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewView.swift; sourceTree = "<group>"; };
-		4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MiserudakeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4378724B83049D0A21C9B748 /* SumiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SumiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		501F90324BAFB02C175E417B /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		52979A3CE092D2101923C77F /* RevenueCatConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatConfig.swift; sourceTree = "<group>"; };
-		55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiserudakeShortcuts.swift; sourceTree = "<group>"; };
+		55FAB182A9FFEDA9A57FAFCA /* SumiShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumiShortcuts.swift; sourceTree = "<group>"; };
 		5E4A573245C756BB9FDC88F6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		657D7725B33B1DDBFD919B52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E1649140553413B4456F607 /* DocumentTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeView.swift; sourceTree = "<group>"; };
@@ -95,9 +95,9 @@
 		AF188BD2A4339C95B10015B9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		C05847D9C4B20BF6994E0002 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		C13874342D80C3CDAB028CC3 /* DetectionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionServiceTests.swift; sourceTree = "<group>"; };
-		C3BEFBD765EDA4EB862C8918 /* Miserudake.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Miserudake.entitlements; sourceTree = "<group>"; };
+		C3BEFBD765EDA4EB862C8918 /* Sumi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sumi.entitlements; sourceTree = "<group>"; };
 		C8F45E32CEB5655DE57C0403 /* MaskingStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyleView.swift; sourceTree = "<group>"; };
-		CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiserudakeApp.swift; sourceTree = "<group>"; };
+		CDCC3D35D9A8F34477675618 /* SumiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumiApp.swift; sourceTree = "<group>"; };
 		CE0C255A3F8E0DD73F3BA8AE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D2FF5A21E4BADE9B3E5E0D3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D52A2B81908BE8E561C0760A /* DocumentTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeTests.swift; sourceTree = "<group>"; };
@@ -181,8 +181,8 @@
 			isa = PBXGroup;
 			children = (
 				78345C70816C89A74E079E67 /* MaskingFlow.swift */,
-				CDCC3D35D9A8F34477675618 /* MiserudakeApp.swift */,
-				55FAB182A9FFEDA9A57FAFCA /* MiserudakeShortcuts.swift */,
+				CDCC3D35D9A8F34477675618 /* SumiApp.swift */,
+				55FAB182A9FFEDA9A57FAFCA /* SumiShortcuts.swift */,
 				52979A3CE092D2101923C77F /* RevenueCatConfig.swift */,
 				A917F0029EFB9D79FB8CD066 /* SupportConfig.swift */,
 			);
@@ -197,7 +197,7 @@
 			path = Purchase;
 			sourceTree = "<group>";
 		};
-		9938ABC58EDD9F3973A23472 /* MiserudakeTests */ = {
+		9938ABC58EDD9F3973A23472 /* SumiTests */ = {
 			isa = PBXGroup;
 			children = (
 				C13874342D80C3CDAB028CC3 /* DetectionServiceTests.swift */,
@@ -205,7 +205,7 @@
 				0A3595521224549237863057 /* ImageMaskingServiceTests.swift */,
 				D7717C3D61A368037328F6A4 /* MaskingFlowTests.swift */,
 			);
-			path = MiserudakeTests;
+			path = SumiTests;
 			sourceTree = "<group>";
 		};
 		ADA9E9627BE8C2A85FEFAE83 /* MaskingStyle */ = {
@@ -227,8 +227,8 @@
 		C4DB28E35F3BF229D27EDF62 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				213DBE8E3D4A5AE18DABAC2A /* Miserudake.app */,
-				4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */,
+				213DBE8E3D4A5AE18DABAC2A /* Sumi.app */,
+				4378724B83049D0A21C9B748 /* SumiTests.xctest */,
 				E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */,
 			);
 			name = Products;
@@ -244,19 +244,19 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		CFD4E2D9CC3CA7D243E45F3A /* Miserudake */ = {
+		CFD4E2D9CC3CA7D243E45F3A /* Sumi */ = {
 			isa = PBXGroup;
 			children = (
 				657D7725B33B1DDBFD919B52 /* Assets.xcassets */,
 				72036ED5286B56670FED0A96 /* Info.plist */,
-				C3BEFBD765EDA4EB862C8918 /* Miserudake.entitlements */,
+				C3BEFBD765EDA4EB862C8918 /* Sumi.entitlements */,
 				879303D4751FD93A8691A9C8 /* App */,
 				F7CE02C0475AAAB585DD762F /* Features */,
 				CA337BA069D117A5875EF84F /* Models */,
 				26A4617627F4971C635E7C84 /* Services */,
 				05BBAD2333E4672CC09256AF /* Shared */,
 			);
-			path = Miserudake;
+			path = Sumi;
 			sourceTree = "<group>";
 		};
 		DDA4C83B954153C19A684CF3 /* Home */ = {
@@ -279,8 +279,8 @@
 		F41AD1B15FE18E6CB24F535D = {
 			isa = PBXGroup;
 			children = (
-				CFD4E2D9CC3CA7D243E45F3A /* Miserudake */,
-				9938ABC58EDD9F3973A23472 /* MiserudakeTests */,
+				CFD4E2D9CC3CA7D243E45F3A /* Sumi */,
+				9938ABC58EDD9F3973A23472 /* SumiTests */,
 				3A21AF43D41AB9AA4BACD860 /* ShareExtension */,
 				C4DB28E35F3BF229D27EDF62 /* Products */,
 			);
@@ -304,9 +304,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2E8534DCF50FFD2066FE322D /* Miserudake */ = {
+		2E8534DCF50FFD2066FE322D /* Sumi */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D5C2BB01F4C05660BFCBEEF4 /* Build configuration list for PBXNativeTarget "Miserudake" */;
+			buildConfigurationList = D5C2BB01F4C05660BFCBEEF4 /* Build configuration list for PBXNativeTarget "Sumi" */;
 			buildPhases = (
 				E82AFAD822944B437C3E4EEF /* Sources */,
 				D9A07422E03628077F5D023F /* Resources */,
@@ -318,17 +318,17 @@
 			dependencies = (
 				59B3002DDDAC47E1BAA6808B /* PBXTargetDependency */,
 			);
-			name = Miserudake;
+			name = Sumi;
 			packageProductDependencies = (
 				9861147A07B1D05E05E86275 /* RevenueCat */,
 			);
-			productName = Miserudake;
-			productReference = 213DBE8E3D4A5AE18DABAC2A /* Miserudake.app */;
+			productName = Sumi;
+			productReference = 213DBE8E3D4A5AE18DABAC2A /* Sumi.app */;
 			productType = "com.apple.product-type.application";
 		};
-		699C37026C367CF3C641E94A /* MiserudakeTests */ = {
+		699C37026C367CF3C641E94A /* SumiTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B504595710121F3435F3E7B3 /* Build configuration list for PBXNativeTarget "MiserudakeTests" */;
+			buildConfigurationList = B504595710121F3435F3E7B3 /* Build configuration list for PBXNativeTarget "SumiTests" */;
 			buildPhases = (
 				E3FCE2418465D34CA9559E5D /* Sources */,
 			);
@@ -337,11 +337,11 @@
 			dependencies = (
 				351A7D603993AE652BA1BA18 /* PBXTargetDependency */,
 			);
-			name = MiserudakeTests;
+			name = SumiTests;
 			packageProductDependencies = (
 			);
-			productName = MiserudakeTests;
-			productReference = 4378724B83049D0A21C9B748 /* MiserudakeTests.xctest */;
+			productName = SumiTests;
+			productReference = 4378724B83049D0A21C9B748 /* SumiTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		CF75C4894AEB1A85C26CAE4D /* ShareExtension */ = {
@@ -373,7 +373,7 @@
 				TargetAttributes = {
 				};
 			};
-			buildConfigurationList = 9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Miserudake" */;
+			buildConfigurationList = 9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Sumi" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -390,8 +390,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2E8534DCF50FFD2066FE322D /* Miserudake */,
-				699C37026C367CF3C641E94A /* MiserudakeTests */,
+				2E8534DCF50FFD2066FE322D /* Sumi */,
+				699C37026C367CF3C641E94A /* SumiTests */,
 				CF75C4894AEB1A85C26CAE4D /* ShareExtension */,
 			);
 		};
@@ -454,8 +454,8 @@
 				701700BE8FFED1A4F611B617 /* MaskingFlow.swift in Sources */,
 				780B505C5B075D52848F3764 /* MaskingStyle.swift in Sources */,
 				35C0E0B38D397F4ED64D2486 /* MaskingStyleView.swift in Sources */,
-				1BE48A40944748CD8AC4D437 /* MiserudakeApp.swift in Sources */,
-				FA69646D977C56F4CC8FBD74 /* MiserudakeShortcuts.swift in Sources */,
+				1BE48A40944748CD8AC4D437 /* SumiApp.swift in Sources */,
+				FA69646D977C56F4CC8FBD74 /* SumiShortcuts.swift in Sources */,
 				E12098AA04837D7F4B304A22 /* OnboardingView.swift in Sources */,
 				F51DC72CA29EE738EF4F9DDF /* PurchaseManager.swift in Sources */,
 				08B1BA176E566345404A3654 /* PurchaseView.swift in Sources */,
@@ -471,7 +471,7 @@
 /* Begin PBXTargetDependency section */
 		351A7D603993AE652BA1BA18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2E8534DCF50FFD2066FE322D /* Miserudake */;
+			target = 2E8534DCF50FFD2066FE322D /* Sumi */;
 			targetProxy = 153D2C5C40E199242E2DF88A /* PBXContainerItemProxy */;
 		};
 		59B3002DDDAC47E1BAA6808B /* PBXTargetDependency */ = {
@@ -492,11 +492,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.MiserudakeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.SumiTests;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Miserudake.app/Miserudake";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sumi.app/Sumi";
 			};
 			name = Debug;
 		};
@@ -504,10 +504,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Miserudake/Miserudake.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sumi/Sumi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Miserudake/Info.plist;
+				INFOPLIST_FILE = Sumi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,10 +544,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Miserudake/Miserudake.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Sumi/Sumi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Miserudake/Info.plist;
+				INFOPLIST_FILE = Sumi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -709,11 +709,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.MiserudakeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.SumiTests;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Miserudake.app/Miserudake";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sumi.app/Sumi";
 			};
 			name = Release;
 		};
@@ -729,7 +729,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Miserudake" */ = {
+		9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Sumi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				36B15B287A8570EFB80F32E7 /* Debug */,
@@ -738,7 +738,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		B504595710121F3435F3E7B3 /* Build configuration list for PBXNativeTarget "MiserudakeTests" */ = {
+		B504595710121F3435F3E7B3 /* Build configuration list for PBXNativeTarget "SumiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				109F1F5AF483FBB04A6EC8AE /* Debug */,
@@ -747,7 +747,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		D5C2BB01F4C05660BFCBEEF4 /* Build configuration list for PBXNativeTarget "Miserudake" */ = {
+		D5C2BB01F4C05660BFCBEEF4 /* Build configuration list for PBXNativeTarget "Sumi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				270DFFE0F784FBA313BBCD10 /* Debug */,
