@@ -7,6 +7,7 @@ struct MaskRegion: Identifiable, Equatable {
     enum Kind: String {
         case text
         case barcode
+        case face
         case manual
     }
 

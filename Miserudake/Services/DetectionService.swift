@@ -21,6 +21,7 @@ enum DetectionService {
         // もう一方の結果は失わずに済むようにするため。
         let textResults = recognizeText(handler: handler)
         let barcodeResults = detectBarcodes(handler: handler)
+        let faceResults = detectFaces(handler: handler)
 
         var regions: [MaskRegion] = []
 
@@ -36,6 +37,14 @@ enum DetectionService {
         // QR/バーコードはマイナンバーカード等で個人情報を符号化していることが多いため、常に候補として有効にする。
         regions += barcodeResults.map {
             MaskRegion(boundingBox: $0.boundingBox, kind: .barcode, isEnabled: true)
+        }
+
+        // 顔写真は「本人確認のため見える必要がある」場面が多く、他の候補と違い
+        // 隠すべきかどうかの前提が用途次第で変わる。誤って隠したまま提出する
+        // 事故を防ぐため、検出はするが初期状態は無効（OFF）にしておき、
+        // 隠したい場合はユーザーが自分でタップして有効にする形にする。
+        regions += faceResults.map {
+            MaskRegion(boundingBox: $0.boundingBox, kind: .face, isEnabled: false)
         }
 
         return regions
@@ -77,6 +86,16 @@ enum DetectionService {
 
     private static func detectBarcodes(handler: VNImageRequestHandler) -> [VNBarcodeObservation] {
         let request = VNDetectBarcodesRequest()
+        do {
+            try handler.perform([request])
+            return request.results ?? []
+        } catch {
+            return []
+        }
+    }
+
+    private static func detectFaces(handler: VNImageRequestHandler) -> [VNFaceObservation] {
+        let request = VNDetectFaceRectanglesRequest()
         do {
             try handler.perform([request])
             return request.results ?? []
