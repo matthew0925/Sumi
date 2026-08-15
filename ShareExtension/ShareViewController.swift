@@ -33,6 +33,14 @@ final class ShareViewController: UIViewController {
             let data: Data?
             switch loaded {
             case let url as URL:
+                // Files/iCloud Drive等から共有された場合、urlはセキュリティスコープ付き
+                // （startAccessingSecurityScopedResourceを呼ばないと読み取りに失敗する）
+                // であることがある。Photosからの共有等スコープが不要なケースでも
+                // 呼び出し自体は安全なため、常に呼んでおく。
+                let didStartAccessing = url.startAccessingSecurityScopedResource()
+                defer {
+                    if didStartAccessing { url.stopAccessingSecurityScopedResource() }
+                }
                 data = try? Data(contentsOf: url)
             case let image as UIImage:
                 data = image.jpegData(compressionQuality: 0.95)

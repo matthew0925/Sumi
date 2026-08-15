@@ -46,8 +46,11 @@ struct MiserudakeApp: App {
         guard url.scheme == "miserudake" else { return }
         switch url.host {
         case "share":
-            guard let data = SharedContainer.consumeHandoffImage(),
-                  let image = UIImage(data: data) else { return }
+            guard let data = SharedContainer.consumeHandoffImage() else { return }
+            guard let image = UIImage(data: data) else {
+                flow.shareImportErrorMessage = "共有された画像を読み込めませんでした。もう一度お試しください。"
+                return
+            }
             flow.startFlow(with: image)
         default:
             break

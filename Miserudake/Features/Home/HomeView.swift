@@ -89,9 +89,19 @@ struct HomeView: View {
         } message: {
             Text("この端末ではカメラを利用できません。カメラロールから画像を選択してください。")
         }
+        .alert("読み込みに失敗しました", isPresented: .constant(flow.shareImportErrorMessage != nil)) {
+            Button("OK") { flow.shareImportErrorMessage = nil }
+        } message: {
+            Text(flow.shareImportErrorMessage ?? "")
+        }
         .onChange(of: intentBridge.pendingAction) { _, action in
             guard action == .openCamera else { return }
             intentBridge.pendingAction = nil
+            // 既に検出・書き出しなど進行中のフローがある状態でSiri等から呼ばれた場合、
+            // カメラを問答無用で開くと進行中の作業（検出結果の手動調整など）が
+            // 確認なしに失われてしまう。ホーム画面にいる（＝進行中のフローがない）
+            // ときだけ反応する。
+            guard flow.path.isEmpty else { return }
             openCameraIfAvailable()
         }
     }

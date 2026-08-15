@@ -18,6 +18,7 @@ final class MaskingFlow: ObservableObject {
     @Published var documentType: DocumentType = .other
     @Published var regions: [MaskRegion] = []
     @Published var maskingStyle: MaskingStyle = .solidBlack
+    @Published var shareImportErrorMessage: String?
 
     func reset() {
         path.removeAll()
