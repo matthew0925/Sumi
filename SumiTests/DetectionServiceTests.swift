@@ -1,5 +1,5 @@
 import Testing
-@testable import Miserudake
+@testable import Sumi
 
 struct DetectionServiceTests {
     @Test("長い数字列は個人情報候補として初期ONになる")

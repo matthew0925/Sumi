@@ -17,27 +17,27 @@
 ## 構成
 
 ```
-Miserudake/
+Sumi/
 ├── App/            アプリのエントリポイントと画面遷移状態（MaskingFlow）
 ├── Models/         DocumentType, MaskRegion, MaskingStyle
 ├── Services/        DetectionService (Vision), ImageMaskingService (Core Graphics/Image), PurchaseManager (StoreKit 2)
 └── Features/        Home / DocumentType / Detection / MaskingStyle / Export / Purchase の各画面
 ```
 
-プロジェクトファイル（`Miserudake.xcodeproj`）は [XcodeGen](https://github.com/yonaskolb/XcodeGen) で `project.yml` から生成している。`.xcodeproj` はコミット済みだが、構成を変更した場合は再生成すること。
+プロジェクトファイル（`Sumi.xcodeproj`）は [XcodeGen](https://github.com/yonaskolb/XcodeGen) で `project.yml` から生成している。`.xcodeproj` はコミット済みだが、構成を変更した場合は再生成すること。
 
 ## セットアップ
 
 ```bash
 brew install xcodegen  # 未導入の場合
 xcodegen generate
-open Miserudake.xcodeproj
+open Sumi.xcodeproj
 ```
 
 ## ビルド確認（CLI）
 
 ```bash
-xcodebuild -project Miserudake.xcodeproj -scheme Miserudake \
+xcodebuild -project Sumi.xcodeproj -scheme Sumi \
   -destination 'generic/platform=iOS Simulator' -configuration Debug build
 ```
 

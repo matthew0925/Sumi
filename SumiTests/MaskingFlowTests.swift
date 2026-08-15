@@ -1,6 +1,6 @@
 import UIKit
 import Testing
-@testable import Miserudake
+@testable import Sumi
 
 @MainActor
 struct MaskingFlowTests {

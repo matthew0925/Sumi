@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
-               BuildableName = "Miserudake.app"
-               BlueprintName = "Miserudake"
-               ReferencedContainer = "container:Miserudake.xcodeproj">
+               BuildableName = "Sumi.app"
+               BlueprintName = "Sumi"
+               ReferencedContainer = "container:Sumi.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
-            BuildableName = "Miserudake.app"
-            BlueprintName = "Miserudake"
-            ReferencedContainer = "container:Miserudake.xcodeproj">
+            BuildableName = "Sumi.app"
+            BlueprintName = "Sumi"
+            ReferencedContainer = "container:Sumi.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -45,9 +45,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "699C37026C367CF3C641E94A"
-               BuildableName = "MiserudakeTests.xctest"
-               BlueprintName = "MiserudakeTests"
-               ReferencedContainer = "container:Miserudake.xcodeproj">
+               BuildableName = "SumiTests.xctest"
+               BlueprintName = "SumiTests"
+               ReferencedContainer = "container:Sumi.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
-            BuildableName = "Miserudake.app"
-            BlueprintName = "Miserudake"
-            ReferencedContainer = "container:Miserudake.xcodeproj">
+            BuildableName = "Sumi.app"
+            BlueprintName = "Sumi"
+            ReferencedContainer = "container:Sumi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -88,9 +88,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2E8534DCF50FFD2066FE322D"
-            BuildableName = "Miserudake.app"
-            BlueprintName = "Miserudake"
-            ReferencedContainer = "container:Miserudake.xcodeproj">
+            BuildableName = "Sumi.app"
+            BlueprintName = "Sumi"
+            ReferencedContainer = "container:Sumi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

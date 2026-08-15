@@ -1,6 +1,6 @@
 import CoreGraphics
 import Testing
-@testable import Miserudake
+@testable import Sumi
 
 struct ImageMaskingServiceTests {
     @Test("Visionの正規化座標（左下原点）が画面ピクセル座標（左上原点）に変換される")

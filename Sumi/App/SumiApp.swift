@@ -2,7 +2,7 @@ import SwiftUI
 import RevenueCat
 
 @main
-struct MiserudakeApp: App {
+struct SumiApp: App {
     @StateObject private var flow = MaskingFlow()
     @StateObject private var purchaseManager: PurchaseManager
 

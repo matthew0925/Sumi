@@ -1,5 +1,5 @@
 import Testing
-@testable import Miserudake
+@testable import Sumi
 
 struct DocumentTypeTests {
     @Test("すべての書類種別に隠すべき項目の目安が用意されている", arguments: DocumentType.allCases)
