@@ -65,7 +65,7 @@ struct ExportPreviewView: View {
                     if let image = renderedImage {
                         ShareLink(
                             item: Image(uiImage: image),
-                            preview: SharePreview("ミセルダケで作成した画像", image: Image(uiImage: image))
+                            preview: SharePreview("Sumiで作成した画像", image: Image(uiImage: image))
                         ) {
                             Image(systemName: "square.and.arrow.up")
                                 .frame(width: 44, height: 44)

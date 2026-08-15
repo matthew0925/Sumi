@@ -62,7 +62,7 @@ final class ShareViewController: UIViewController {
     }
 
     private func openHostApp() {
-        guard let url = URL(string: "miserudake://share") else {
+        guard let url = URL(string: "sumi://share") else {
             extensionContext?.completeRequest(returningItems: nil)
             return
         }

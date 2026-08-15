@@ -76,12 +76,12 @@
 		0A3595521224549237863057 /* ImageMaskingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMaskingServiceTests.swift; sourceTree = "<group>"; };
 		0FBE9792637E0D55AE1BA110 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		1A272A64F4CF1758159C841B /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
-		213DBE8E3D4A5AE18DABAC2A /* Sumi.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Sumi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		213DBE8E3D4A5AE18DABAC2A /* Sumi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sumi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BAFC509160B7D02162223D6 /* DetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionService.swift; sourceTree = "<group>"; };
 		379153147FA66E4BC00AC609 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		3B1FAD279A4589E7221F0805 /* DocumentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentType.swift; sourceTree = "<group>"; };
 		3CF8027801351630C6728B99 /* ExportPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewView.swift; sourceTree = "<group>"; };
-		4378724B83049D0A21C9B748 /* SumiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SumiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4378724B83049D0A21C9B748 /* SumiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SumiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		501F90324BAFB02C175E417B /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		52979A3CE092D2101923C77F /* RevenueCatConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatConfig.swift; sourceTree = "<group>"; };
 		55FAB182A9FFEDA9A57FAFCA /* SumiShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumiShortcuts.swift; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		D2FF5A21E4BADE9B3E5E0D3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D52A2B81908BE8E561C0760A /* DocumentTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeTests.swift; sourceTree = "<group>"; };
 		D7717C3D61A368037328F6A4 /* MaskingFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingFlowTests.swift; sourceTree = "<group>"; };
-		E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3688F0EF1133E45F35AFA6B /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3E0846F11571D5BC7CC1F4E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		E4A7012FAB684FD408318EB4 /* MaskingStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyle.swift; sourceTree = "<group>"; };
 		EBF6297686ED6528BD208F91 /* SharedContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainer.swift; sourceTree = "<group>"; };
@@ -370,8 +370,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 9A553549FB255AC058EDBCF6 /* Build configuration list for PBXProject "Sumi" */;
 			developmentRegion = en;
@@ -486,6 +484,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -507,13 +506,14 @@
 				CODE_SIGN_ENTITLEMENTS = Sumi/Sumi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				INFOPLIST_FILE = Sumi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.sumi;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -525,6 +525,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -532,7 +533,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.sumi.ShareExtension;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -547,13 +548,14 @@
 				CODE_SIGN_ENTITLEMENTS = Sumi/Sumi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				INFOPLIST_FILE = Sumi/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.sumi;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -628,6 +630,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -635,7 +638,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.miserudake.ShareExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.matthew0925.sumi.ShareExtension;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -703,6 +706,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = XV92DHDWYL;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

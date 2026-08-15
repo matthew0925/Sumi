@@ -4,7 +4,7 @@ import Foundation
 /// 受け渡すためのApp Groupコンテナ。渡した画像は読み取り側が読み込み次第すぐ削除する
 /// （書き出し後は破棄する、という本アプリの一時ファイル方針をExtension経由でも維持する）。
 enum SharedContainer {
-    static let appGroupID = "group.com.matthew0925.miserudake"
+    static let appGroupID = "group.com.matthew0925.sumi"
 
     private static var containerURL: URL? {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID)

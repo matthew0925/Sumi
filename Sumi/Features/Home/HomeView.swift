@@ -15,7 +15,7 @@ struct HomeView: View {
             Spacer()
 
             VStack(spacing: 8) {
-                Text("ミセルダケ")
+                Text("Sumi")
                     .font(.largeTitle.bold())
                 Text("必要な情報だけ、見せる。")
                     .font(.subheadline)

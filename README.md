@@ -48,5 +48,5 @@ xcodebuild -project Sumi.xcodeproj -scheme Sumi \
 
 ## 今後の作業
 
-- App Store Connectで買い切り商品ID `com.matthew0925.miserudake.watermark_removal` を作成
+- App Store Connectで買い切り商品ID `com.matthew0925.sumi.watermark_removal` を作成
 - 実機の身分証サンプルでの検出精度検証

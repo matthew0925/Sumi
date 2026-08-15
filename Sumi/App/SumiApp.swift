@@ -40,10 +40,10 @@ struct SumiApp: App {
         }
     }
 
-    /// Share Extension（miserudake://share）とApp Intent双方の着地を1箇所で処理する。
+    /// Share Extension（sumi://share）とApp Intent双方の着地を1箇所で処理する。
     @MainActor
     private func handle(url: URL) {
-        guard url.scheme == "miserudake" else { return }
+        guard url.scheme == "sumi" else { return }
         switch url.host {
         case "share":
             guard let data = SharedContainer.consumeHandoffImage() else { return }

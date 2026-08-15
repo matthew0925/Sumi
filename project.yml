@@ -22,22 +22,22 @@ targets:
       path: Sumi/Info.plist
       properties:
         UILaunchScreen: {}
-        CFBundleDisplayName: ミセルダケ
+        CFBundleDisplayName: Sumi
         NSCameraUsageDescription: 身分証などの書類を撮影してマスキングするために使用します。
         NSPhotoLibraryUsageDescription: カメラロールから書類の画像を選択するために使用します。
         NSPhotoLibraryAddUsageDescription: マスキング済みの画像を保存するために使用します。
         CFBundleURLTypes:
           - CFBundleURLSchemes:
-              - miserudake
-            CFBundleURLName: com.matthew0925.miserudake
+              - sumi
+            CFBundleURLName: com.matthew0925.sumi
     entitlements:
       path: Sumi/Sumi.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.matthew0925.miserudake
+          - group.com.matthew0925.sumi
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.miserudake
+        PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.sumi
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1"
         MARKETING_VERSION: "1.0"
@@ -68,7 +68,7 @@ targets:
     info:
       path: ShareExtension/Info.plist
       properties:
-        CFBundleDisplayName: ミセルダケで隠す
+        CFBundleDisplayName: Sumiで隠す
         NSExtension:
           NSExtensionAttributes:
             NSExtensionActivationRule:
@@ -79,10 +79,10 @@ targets:
       path: ShareExtension/ShareExtension.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.matthew0925.miserudake
+          - group.com.matthew0925.sumi
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.miserudake.ShareExtension
+        PRODUCT_BUNDLE_IDENTIFIER: com.matthew0925.sumi.ShareExtension
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1"
         MARKETING_VERSION: "1.0"

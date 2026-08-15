@@ -4,8 +4,8 @@ import AppIntents
 /// 検出〜手動確認〜書き出しは必ずユーザー操作を伴うため、Intent側では
 /// 「アプリを開いて撮影画面から始める」ところまでを担当する。
 struct OpenSumiIntent: AppIntent {
-    static var title: LocalizedStringResource = "ミセルダケで身分証を隠す"
-    static var description = IntentDescription("ミセルダケを開いて、身分証の撮影からマスキングを始めます。")
+    static var title: LocalizedStringResource = "Sumiで身分証を隠す"
+    static var description = IntentDescription("Sumiを開いて、身分証の撮影からマスキングを始めます。")
     static var openAppWhenRun: Bool = true
 
     @MainActor
