@@ -11,42 +11,50 @@ struct HomeView: View {
     @State private var showCameraUnavailableAlert = false
 
     var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 32) {
+                    Spacer(minLength: 24)
 
-            VStack(spacing: 8) {
-                Text("Sumi")
-                    .font(.largeTitle.bold())
-                Text("必要な情報だけ、見せる。")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+                    VStack(spacing: 8) {
+                        Text("Sumi")
+                            .font(.largeTitle.bold())
+                        Text("必要な情報だけ、見せる。")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
 
-            VStack(spacing: 16) {
-                Button {
-                    openCameraIfAvailable()
-                } label: {
-                    Label("撮影する", systemImage: "camera.fill")
-                        .frame(maxWidth: .infinity)
+                    VStack(spacing: 16) {
+                        Button {
+                            openCameraIfAvailable()
+                        } label: {
+                            Label("撮影する", systemImage: "camera.fill")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+
+                        PhotosPicker(selection: $photoPickerItem, matching: .images) {
+                            Label("カメラロールから選択", systemImage: "photo.on.rectangle")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.large)
+                    }
+                    .padding(.horizontal, 32)
+
+                    Spacer(minLength: 24)
+
+                    Text("画像は端末の外に送信されません。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 24)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-
-                PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                    Label("カメラロールから選択", systemImage: "photo.on.rectangle")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
             }
-            .padding(.horizontal, 32)
-
-            Spacer()
-
-            Text("画像は端末の外に送信されません。")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .padding(.bottom, 24)
         }
         .sheet(isPresented: $showCamera) {
             CameraCaptureView { image in

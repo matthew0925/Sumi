@@ -172,6 +172,13 @@ struct DetectionPreviewView: View {
         }
         .task {
             presets = MaskingPresetStore.load()
+#if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-ASOSnapshot") {
+                initialRegions = flow.regions
+                isDetecting = false
+                return
+            }
+#endif
             await runDetection()
         }
         .alert("マスク対象がありません", isPresented: $showNoMaskConfirmation) {
@@ -286,8 +293,14 @@ private struct RegionOverlay: View {
                         region.isEnabled.toggle()
                     })
             )
-            .accessibilityLabel(region.isEnabled ? "マスク対象。タップで解除" : "マスク対象外。タップで追加")
+            .accessibilityLabel("マスク候補")
+            .accessibilityValue(region.isEnabled ? "選択中" : "未選択")
+            .accessibilityHint("ダブルタップで選択を切り替えます")
             .accessibilityAddTraits(.isButton)
+            .accessibilityAction(named: "削除") {
+                Haptics.warning()
+                onDelete()
+            }
     }
 }
 

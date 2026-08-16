@@ -24,9 +24,12 @@ struct OnboardingView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 42, style: .continuous).fill(SumiTheme.paperRaised)
                                     .frame(width: 220, height: 220).shadow(color: SumiTheme.ink.opacity(0.10), radius: 24, y: 12)
-                                Image(systemName: item.icon).font(.system(size: 76, weight: .light))
+                                Image(systemName: item.icon)
+                                    .font(.system(size: 76, weight: .light))
+                                    .accessibilityHidden(true)
                                     .foregroundStyle(index == 2 ? SumiTheme.teal : SumiTheme.ink)
                             }
+                            .accessibilityElement(children: .combine)
                             VStack(spacing: 12) {
                                 Text(item.title).font(.title.bold()).foregroundStyle(SumiTheme.ink).multilineTextAlignment(.center)
                                 Text(item.subtitle).foregroundStyle(SumiTheme.mutedInk).multilineTextAlignment(.center)
