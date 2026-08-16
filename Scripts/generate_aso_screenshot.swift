@@ -79,6 +79,7 @@ func topRect(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> NSRect 
 let paragraph = NSMutableParagraphStyle()
 paragraph.alignment = .center
 paragraph.lineBreakMode = .byWordWrapping
+paragraph.lineSpacing = 6
 
 let headlineAttributes: [NSAttributedString.Key: Any] = [
     .font: NSFont.systemFont(ofSize: 78, weight: .bold),
@@ -86,7 +87,7 @@ let headlineAttributes: [NSAttributedString.Key: Any] = [
     .paragraphStyle: paragraph
 ]
 NSAttributedString(string: arguments.headline, attributes: headlineAttributes)
-    .draw(with: topRect(x: 90, y: 150, width: 1110, height: 240), options: [.usesLineFragmentOrigin, .usesFontLeading])
+    .draw(with: topRect(x: 90, y: 105, width: 1110, height: 275), options: [.usesLineFragmentOrigin, .usesFontLeading])
 
 if !arguments.subheadline.isEmpty {
     let subheadlineAttributes: [NSAttributedString.Key: Any] = [
@@ -95,12 +96,12 @@ if !arguments.subheadline.isEmpty {
         .paragraphStyle: paragraph
     ]
     NSAttributedString(string: arguments.subheadline, attributes: subheadlineAttributes)
-        .draw(with: topRect(x: 120, y: 430, width: 1050, height: 120), options: [.usesLineFragmentOrigin, .usesFontLeading])
+        .draw(with: topRect(x: 120, y: 405, width: 1050, height: 130), options: [.usesLineFragmentOrigin, .usesFontLeading])
 }
 
 // 上1/3をコピー、下2/3を端末画面に割り当てるスプリットレイアウト。
 // 端末を下端から少しはみ出させ、背景を端まで使うfull-bleedな印象も加える。
-let deviceRect = topRect(x: 105, y: 760, width: 1080, height: 2210)
+let deviceRect = topRect(x: 105, y: 710, width: 1080, height: 2288)
 let devicePath = NSBezierPath(roundedRect: deviceRect, xRadius: 112, yRadius: 112)
 NSColor(red: 0.08, green: 0.085, blue: 0.09, alpha: 1).setFill()
 devicePath.fill()
@@ -121,10 +122,6 @@ let drawRect = NSRect(
 )
 screenshot.draw(in: drawRect, from: .zero, operation: .sourceOver, fraction: 1)
 NSGraphicsContext.restoreGraphicsState()
-
-let islandRect = NSRect(x: deviceRect.midX - 115, y: deviceRect.maxY - 74, width: 230, height: 54)
-NSColor.black.setFill()
-NSBezierPath(roundedRect: islandRect, xRadius: 27, yRadius: 27).fill()
 
 NSGraphicsContext.restoreGraphicsState()
 

@@ -69,10 +69,9 @@ struct SumiApp: App {
         flow.startFlow(with: Self.snapshotSampleImage())
         flow.documentType = .driversLicense
         flow.regions = [
-            MaskRegion(boundingBox: CGRect(x: 0.16, y: 0.59, width: 0.68, height: 0.065), kind: .text),
-            MaskRegion(boundingBox: CGRect(x: 0.16, y: 0.47, width: 0.68, height: 0.065), kind: .text),
-            MaskRegion(boundingBox: CGRect(x: 0.16, y: 0.35, width: 0.46, height: 0.065), kind: .text),
-            MaskRegion(boundingBox: CGRect(x: 0.67, y: 0.12, width: 0.18, height: 0.12), kind: .barcode)
+            MaskRegion(boundingBox: CGRect(x: 0.11, y: 0.86, width: 0.52, height: 0.075), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.12, y: 0.72, width: 0.74, height: 0.08), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.20, y: 0.245, width: 0.55, height: 0.08), kind: .text)
         ]
 
         switch step {
@@ -86,34 +85,7 @@ struct SumiApp: App {
 
 #if DEBUG
     private static func snapshotSampleImage() -> UIImage {
-        let size = CGSize(width: 900, height: 1_400)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
-            UIColor(red: 0.97, green: 0.95, blue: 0.90, alpha: 1).setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-
-            let ink = UIColor(red: 0.10, green: 0.11, blue: 0.11, alpha: 1)
-            let muted = UIColor(red: 0.38, green: 0.36, blue: 0.32, alpha: 1)
-            let title = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 48, weight: .bold), .foregroundColor: ink]
-            let body = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 34, weight: .medium), .foregroundColor: ink]
-            let caption = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .regular), .foregroundColor: muted]
-
-            NSAttributedString(string: "SAMPLE ID CARD", attributes: title).draw(at: CGPoint(x: 70, y: 80))
-            NSAttributedString(string: "撮影用サンプル（実在しない情報）", attributes: caption).draw(at: CGPoint(x: 72, y: 145))
-            NSAttributedString(string: "氏名　墨田 すみ", attributes: body).draw(at: CGPoint(x: 140, y: 450))
-            NSAttributedString(string: "住所　東京都サンプル区 1-2-3", attributes: body).draw(at: CGPoint(x: 140, y: 620))
-            NSAttributedString(string: "生年月日　2000年1月1日", attributes: body).draw(at: CGPoint(x: 140, y: 790))
-            NSAttributedString(string: "番号　1234 5678 9000", attributes: body).draw(at: CGPoint(x: 140, y: 960))
-
-            ink.setFill()
-            UIBezierPath(roundedRect: CGRect(x: 590, y: 1_055, width: 170, height: 170), cornerRadius: 18).fill()
-            UIColor.white.setFill()
-            for row in 0..<4 {
-                for column in 0..<4 where (row + column).isMultiple(of: 2) {
-                    context.fill(CGRect(x: 610 + column * 32, y: 1_075 + row * 32, width: 20, height: 20))
-                }
-            }
-        }
+        UIImage(named: "ASOSampleLicense") ?? UIImage()
     }
 #endif
 
