@@ -116,6 +116,7 @@ struct ExportPreviewView: View {
             source: source,
             regions: flow.regions,
             style: flow.maskingStyle,
+            safetyPadding: flow.safetyPadding,
             watermarked: !purchaseManager.isWatermarkRemoved
         )
     }

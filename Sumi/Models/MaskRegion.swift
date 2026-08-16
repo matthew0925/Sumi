@@ -4,11 +4,19 @@ import CoreGraphics
 /// 検出された（あるいはユーザーが手動追加した）マスク候補領域。
 /// 座標は元画像の正規化座標系（左下原点、Vision準拠）で保持する。
 struct MaskRegion: Identifiable, Equatable {
-    enum Kind: String {
+    enum Kind: String, CaseIterable, Codable {
         case text
         case barcode
         case face
         case manual
+    }
+
+    static func applying(enabledKinds: Set<Kind>, to regions: [MaskRegion]) -> [MaskRegion] {
+        regions.map { region in
+            var updated = region
+            updated.isEnabled = enabledKinds.contains(region.kind)
+            return updated
+        }
     }
 
     let id: UUID

@@ -13,9 +13,9 @@ struct PurchaseView: View {
                 .foregroundStyle(.tint)
 
             VStack(spacing: 8) {
-                Text("透かしを解除")
+                Text("Sumi Plus")
                     .font(.title2.bold())
-                Text("一度のお支払いで、以後すべての書き出しから透かしが消えます。サブスクリプションはありません。")
+                Text("透かし解除に加え、安全余白とマスクプリセットを利用できます。一度のお支払いで、サブスクリプションはありません。")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -56,7 +56,7 @@ struct PurchaseView: View {
                 Spacer().frame(height: 8)
             }
         }
-        .navigationTitle("購入")
+        .navigationTitle("Sumi Plus")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await purchaseManager.refresh()

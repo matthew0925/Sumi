@@ -19,6 +19,7 @@ final class MaskingFlow: ObservableObject {
     @Published var documentType: DocumentType = .other
     @Published var regions: [MaskRegion] = []
     @Published var maskingStyle: MaskingStyle = .solidBlack
+    @Published var safetyPadding: MaskSafetyPadding = .standard
     @Published var shareImportErrorMessage: String?
 
     func reset() {
@@ -27,6 +28,7 @@ final class MaskingFlow: ObservableObject {
         documentType = .other
         regions = []
         maskingStyle = .solidBlack
+        safetyPadding = .standard
     }
 
     func startFlow(with image: UIImage) {
@@ -34,6 +36,7 @@ final class MaskingFlow: ObservableObject {
         documentType = .other
         regions = []
         maskingStyle = .solidBlack
+        safetyPadding = .standard
         path = [.documentType]
     }
 

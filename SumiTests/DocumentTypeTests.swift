@@ -7,4 +7,11 @@ struct DocumentTypeTests {
         #expect(!type.commonlyHiddenFields.isEmpty)
         #expect(!type.displayName.isEmpty)
     }
+
+    @Test("書類別の推奨ルールは文字とバーコードを安全側で選択する", arguments: DocumentType.allCases)
+    func recommendedRuleIncludesSensitiveKinds(type: DocumentType) {
+        #expect(type.recommendedMaskKinds.contains(.text))
+        #expect(type.recommendedMaskKinds.contains(.barcode))
+        #expect(!type.recommendedMaskKinds.contains(.face))
+    }
 }

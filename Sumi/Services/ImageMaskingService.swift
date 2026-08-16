@@ -8,6 +8,7 @@ enum ImageMaskingService {
         source: UIImage,
         regions: [MaskRegion],
         style: MaskingStyle,
+        safetyPadding: MaskSafetyPadding = .standard,
         watermarked: Bool
     ) -> UIImage {
         // カメラロールの写真はEXIFの向き情報を持ち、source.cgImageは回転前の
@@ -27,7 +28,11 @@ enum ImageMaskingService {
 
             let cgContext = context.cgContext
             for region in regions where region.isEnabled {
-                let rect = convert(region.boundingBox, to: size)
+                let paddedBox = region.boundingBox.insetBy(
+                    dx: -safetyPadding.normalizedInset,
+                    dy: -safetyPadding.normalizedInset
+                )
+                let rect = convert(paddedBox, to: size)
                 switch style {
                 case .solidBlack:
                     cgContext.setFillColor(UIColor.black.cgColor)

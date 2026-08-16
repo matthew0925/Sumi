@@ -2,11 +2,13 @@ import SwiftUI
 
 struct DetectionPreviewView: View {
     @EnvironmentObject private var flow: MaskingFlow
+    @EnvironmentObject private var purchaseManager: PurchaseManager
     @State private var isDetecting = true
     @State private var dragStart: CGPoint?
     @State private var dragCurrent: CGPoint?
     @State private var initialRegions: [MaskRegion] = []
     @State private var showNoMaskConfirmation = false
+    @State private var presets: [MaskingPreset] = []
 
     var body: some View {
         VStack(spacing: 16) {
@@ -126,7 +128,50 @@ struct DetectionPreviewView: View {
         }
         .navigationTitle("検出結果の確認")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button {
+                        applyRecommendedRule()
+                    } label: {
+                        Label("書類の推奨ルール", systemImage: "doc.badge.gearshape")
+                    }
+
+                    if presets.isEmpty {
+                        Button {
+                            if !purchaseManager.isWatermarkRemoved {
+                                flow.path.append(.purchase)
+                            }
+                        } label: {
+                            Label(
+                                purchaseManager.isWatermarkRemoved ? "保存済みプリセットなし" : "プリセット（有料版）",
+                                systemImage: purchaseManager.isWatermarkRemoved ? "tray" : "lock"
+                            )
+                        }
+                        .disabled(purchaseManager.isWatermarkRemoved)
+                    } else {
+                        Section("プリセット") {
+                            ForEach(presets) { preset in
+                                Button(preset.name) { apply(preset) }
+                                    .disabled(!purchaseManager.isWatermarkRemoved)
+                            }
+                            if !purchaseManager.isWatermarkRemoved {
+                                Button {
+                                    flow.path.append(.purchase)
+                                } label: {
+                                    Label("有料版で利用する", systemImage: "lock.open")
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Label("ルール", systemImage: "slider.horizontal.3")
+                }
+                .disabled(isDetecting)
+            }
+        }
         .task {
+            presets = MaskingPresetStore.load()
             await runDetection()
         }
         .alert("マスク対象がありません", isPresented: $showNoMaskConfirmation) {
@@ -137,6 +182,21 @@ struct DetectionPreviewView: View {
         } message: {
             Text("有効なマスク領域が1件もありません。このまま書き出すと、隠すべき情報がそのまま見える状態で書き出されます。")
         }
+    }
+
+    private func applyRecommendedRule() {
+        flow.regions = MaskRegion.applying(
+            enabledKinds: flow.documentType.recommendedMaskKinds,
+            to: flow.regions
+        )
+        Haptics.light()
+    }
+
+    private func apply(_ preset: MaskingPreset) {
+        flow.regions = MaskRegion.applying(enabledKinds: preset.enabledKinds, to: flow.regions)
+        flow.maskingStyle = preset.style
+        flow.safetyPadding = preset.safetyPadding
+        Haptics.light()
     }
 
     private func runDetection() async {
@@ -233,6 +293,8 @@ private struct RegionOverlay: View {
 
 #Preview {
     NavigationStack {
-        DetectionPreviewView().environmentObject(MaskingFlow())
+        DetectionPreviewView()
+            .environmentObject(MaskingFlow())
+            .environmentObject(PurchaseManager())
     }
 }

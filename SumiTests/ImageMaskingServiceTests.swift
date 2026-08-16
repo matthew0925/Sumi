@@ -3,6 +3,21 @@ import Testing
 @testable import Sumi
 
 struct ImageMaskingServiceTests {
+    @Test("対象種別ルールを適用すると一致する領域だけが有効になる")
+    func appliesEnabledKinds() {
+        let regions = [
+            MaskRegion(boundingBox: .zero, kind: .text, isEnabled: false),
+            MaskRegion(boundingBox: .zero, kind: .barcode, isEnabled: true),
+            MaskRegion(boundingBox: .zero, kind: .face, isEnabled: true)
+        ]
+
+        let applied = MaskRegion.applying(enabledKinds: [.text, .barcode], to: regions)
+
+        #expect(applied[0].isEnabled)
+        #expect(applied[1].isEnabled)
+        #expect(!applied[2].isEnabled)
+    }
+
     @Test("Visionの正規化座標（左下原点）が画面ピクセル座標（左上原点）に変換される")
     func convertsBottomLeftOriginToTopLeftOrigin() {
         let size = CGSize(width: 1000, height: 500)

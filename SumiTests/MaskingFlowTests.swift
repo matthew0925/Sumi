@@ -8,6 +8,7 @@ struct MaskingFlowTests {
     func startFlowResetsStateAndNavigates() {
         let flow = MaskingFlow()
         flow.maskingStyle = .mosaic
+        flow.safetyPadding = .maximum
         flow.regions = [MaskRegion(boundingBox: .zero, kind: .manual)]
         flow.path = [.export, .purchase]
 
@@ -17,6 +18,7 @@ struct MaskingFlowTests {
         #expect(flow.sourceImage === image)
         #expect(flow.regions.isEmpty)
         #expect(flow.path == [.documentType])
+        #expect(flow.safetyPadding == .standard)
     }
 
     @Test("resetで全状態が初期化される")
@@ -25,6 +27,7 @@ struct MaskingFlowTests {
         flow.startFlow(with: UIImage())
         flow.path.append(.detectionPreview)
         flow.documentType = .passport
+        flow.safetyPadding = .wide
 
         flow.reset()
 
@@ -33,6 +36,7 @@ struct MaskingFlowTests {
         #expect(flow.documentType == .other)
         #expect(flow.regions.isEmpty)
         #expect(flow.maskingStyle == .solidBlack)
+        #expect(flow.safetyPadding == .standard)
     }
 
     @Test("高解像度画像は向きを正規化して長辺4096px以内へ縮小される")
@@ -56,11 +60,13 @@ struct MaskingFlowTests {
         let flow = MaskingFlow()
         flow.documentType = .passport
         flow.maskingStyle = .mosaic
+        flow.safetyPadding = .maximum
 
         flow.startFlow(with: UIImage())
 
         #expect(flow.documentType == .other)
         #expect(flow.maskingStyle == .solidBlack)
+        #expect(flow.safetyPadding == .standard)
     }
 
     @Test("圧縮画像データはフル解像度展開前に処理用サイズへダウンサンプルされる")

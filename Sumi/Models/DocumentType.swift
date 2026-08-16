@@ -52,4 +52,15 @@ enum DocumentType: String, CaseIterable, Identifiable {
             return []
         }
     }
+
+    /// 書類全体へ一括適用できる安全側の初期ルール。
+    /// 顔は本人確認用途で必要なことが多いため自動では隠さず、手動で選べる状態にする。
+    var recommendedMaskKinds: Set<MaskRegion.Kind> {
+        switch self {
+        case .driversLicense, .myNumberCard, .healthInsuranceCard, .passport:
+            return [.text, .barcode, .manual]
+        case .other:
+            return [.text, .barcode, .manual]
+        }
+    }
 }
