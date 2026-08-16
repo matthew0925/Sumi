@@ -1,5 +1,7 @@
 # App Store 掲載情報（ASO素材）— Sumi
 
+スクリーンショットの制作仕様と生成コマンドは [aso-screenshots/README.md](aso-screenshots/README.md) を参照してください。
+
 ## 競合分析（2026年8月調査）
 
 同カテゴリで実際にストアに存在する「黒塗り・モザイクで個人情報を隠す」系アプリを調査した。

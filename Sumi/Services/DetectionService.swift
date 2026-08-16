@@ -6,20 +6,20 @@ import UIKit
 enum DetectionService {
     /// Visionの認識処理はCPU負荷が高く同期APIのため、呼び出し元（MainActor）を
     /// ブロックしないよう明示的にバックグラウンドタスクへ切り離して実行する。
-    static func detectCandidates(in image: UIImage) async -> [MaskRegion] {
+    static func detectCandidates(in image: UIImage, documentType: DocumentType = .other) async -> [MaskRegion] {
         await Task.detached(priority: .userInitiated) {
-            detectCandidatesSynchronously(in: image)
+            detectCandidatesSynchronously(in: image, documentType: documentType)
         }.value
     }
 
-    private static func detectCandidatesSynchronously(in image: UIImage) -> [MaskRegion] {
+    private static func detectCandidatesSynchronously(in image: UIImage, documentType: DocumentType) -> [MaskRegion] {
         guard let cgImage = image.cgImage else { return [] }
         let handler = VNImageRequestHandler(cgImage: cgImage, orientation: image.cgImageOrientation)
 
         // テキスト検出とバーコード検出は互いに独立させておく。
         // 一方が失敗（例: Simulatorでの.accurateモデル読み込み失敗）しても、
         // もう一方の結果は失わずに済むようにするため。
-        let textResults = recognizeText(handler: handler)
+        let textResults = recognizeText(handler: handler, documentType: documentType)
         let barcodeResults = detectBarcodes(handler: handler)
         let faceResults = detectFaces(handler: handler)
 
@@ -30,7 +30,7 @@ enum DetectionService {
             return MaskRegion(
                 boundingBox: observation.boundingBox,
                 kind: .text,
-                isEnabled: looksLikePersonalInformation(text)
+                isEnabled: looksLikePersonalInformation(text, documentType: documentType)
             )
         }
 
@@ -58,14 +58,20 @@ enum DetectionService {
     /// 片方が失敗（例: Simulatorでの.accurateモデル読み込み失敗）しても、
     /// もう一方の結果は活かす。両方失敗した場合は「検出0件」として扱い、
     /// ユーザーが手動でマスク領域を追加できる状態に倒す（アプリを詰まらせない）。
-    private static func recognizeText(handler: VNImageRequestHandler) -> [VNRecognizedTextObservation] {
+    private static func recognizeText(
+        handler: VNImageRequestHandler,
+        documentType: DocumentType
+    ) -> [VNRecognizedTextObservation] {
         var merged: [VNRecognizedTextObservation] = []
 
         for level in [VNRequestTextRecognitionLevel.accurate, .fast] {
             let request = VNRecognizeTextRequest()
             request.recognitionLevel = level
-            request.usesLanguageCorrection = false
+            request.usesLanguageCorrection = level == .accurate
             request.recognitionLanguages = ["ja-JP", "en-US"]
+            request.automaticallyDetectsLanguage = true
+            request.minimumTextHeight = 0.006
+            request.customWords = japaneseIdentityDocumentTerms + documentType.ocrCustomWords
             do {
                 try handler.perform([request])
                 for observation in request.results ?? [] {
@@ -107,8 +113,13 @@ enum DetectionService {
     /// 生年月日・個人番号など「隠すべき可能性が高い」パターンにマッチするかどうかの簡易判定。
     /// 意味の断定はせず、初期のON/OFF状態を決めるためだけに使う（最終判断は必ずユーザー確認）。
     /// テストから直接検証できるようinternalにしている。
-    static func looksLikePersonalInformation(_ text: String) -> Bool {
-        let digitsOnly = text.filter(\.isNumber)
+    static func looksLikePersonalInformation(
+        _ text: String,
+        documentType: DocumentType = .other
+    ) -> Bool {
+        let normalized = text.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? text
+        let compact = normalized.replacingOccurrences(of: " ", with: "")
+        let digitsOnly = compact.filter(\.isNumber)
 
         // 12桁の個人番号（マイナンバー）や免許証番号・生年月日などに典型的な数字の並び。
         // Visionは長い番号を複数の断片に分割して認識することがあるため、
@@ -118,19 +129,44 @@ enum DetectionService {
             return true
         }
 
+        let personalInformationLabels = [
+            "氏名", "名前", "住所", "生年月日", "個人番号", "免許証番号", "旅券番号",
+            "保険者番号", "記号", "本籍", "性別", "交付", "有効期限", "国籍"
+        ]
+        if personalInformationLabels.contains(where: compact.contains) {
+            return true
+        }
+        if documentType.ocrCustomWords.contains(where: compact.contains) {
+            return true
+        }
+
+        let patterns = [
+            #"〒?\d{3}-?\d{4}"#,
+            #"0\d{1,4}-?\d{1,4}-?\d{3,4}"#,
+            #"\d{2,4}[./年-]\d{1,2}[./月-]\d{1,2}日?"#
+        ]
+        if patterns.contains(where: { compact.range(of: $0, options: .regularExpression) != nil }) {
+            return true
+        }
+
         let addressKeywords = ["都", "道", "府", "県", "市", "区", "町", "村", "丁目", "番地"]
-        if addressKeywords.contains(where: text.contains) {
+        if addressKeywords.contains(where: compact.contains) {
             return true
         }
 
         let dateKeywords = ["年", "月", "日", "生"]
-        let dateKeywordHits = dateKeywords.filter(text.contains).count
+        let dateKeywordHits = dateKeywords.filter(compact.contains).count
         if dateKeywordHits >= 2 {
             return true
         }
 
         return false
     }
+
+    private static let japaneseIdentityDocumentTerms = [
+        "氏名", "住所", "生年月日", "個人番号", "運転免許証", "健康保険証",
+        "旅券番号", "本籍", "有効期限", "臓器提供意思", "保険者番号"
+    ]
 }
 
 private extension CGRect {

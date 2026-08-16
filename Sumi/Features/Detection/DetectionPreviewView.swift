@@ -142,7 +142,7 @@ struct DetectionPreviewView: View {
     private func runDetection() async {
         guard let image = flow.sourceImage else { return }
         isDetecting = true
-        let detected = await DetectionService.detectCandidates(in: image)
+        let detected = await DetectionService.detectCandidates(in: image, documentType: flow.documentType)
         guard !Task.isCancelled, flow.sourceImage === image else { return }
         flow.regions = detected
         initialRegions = detected

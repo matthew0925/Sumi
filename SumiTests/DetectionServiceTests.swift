@@ -35,4 +35,20 @@ struct DetectionServiceTests {
         #expect(DetectionService.looksLikePersonalInformation("0127"))
         #expect(DetectionService.looksLikePersonalInformation("78900"))
     }
+
+    @Test("全角数字の郵便番号も個人情報候補として検出する")
+    func fullWidthPostalCodeIsFlagged() {
+        #expect(DetectionService.looksLikePersonalInformation("〒１５０－０００１"))
+    }
+
+    @Test("ハイフンを含む電話番号を個人情報候補として検出する")
+    func phoneNumberIsFlagged() {
+        #expect(DetectionService.looksLikePersonalInformation("03-1234-5678"))
+    }
+
+    @Test("個人情報ラベルは数字がなくても候補として検出する")
+    func identityLabelIsFlagged() {
+        #expect(DetectionService.looksLikePersonalInformation("氏名"))
+        #expect(DetectionService.looksLikePersonalInformation("本籍"))
+    }
 }

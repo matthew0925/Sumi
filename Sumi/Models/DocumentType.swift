@@ -36,4 +36,20 @@ enum DocumentType: String, CaseIterable, Identifiable {
             return ["住所", "生年月日", "各種番号（会員番号・口座番号等）"]
         }
     }
+
+    /// Visionの日本語OCRで書類固有の語を認識しやすくするための補助辞書。
+    var ocrCustomWords: [String] {
+        switch self {
+        case .driversLicense:
+            return ["運転免許証", "免許の条件等", "公安委員会", "優良"]
+        case .myNumberCard:
+            return ["個人番号カード", "個人番号", "電子証明書", "臓器提供意思"]
+        case .healthInsuranceCard:
+            return ["健康保険", "被保険者", "保険者番号", "記号", "枝番"]
+        case .passport:
+            return ["日本国旅券", "旅券番号", "国籍", "有効期間満了日", "PASSPORT"]
+        case .other:
+            return []
+        }
+    }
 }
