@@ -82,32 +82,32 @@ paragraph.lineBreakMode = .byWordWrapping
 paragraph.lineSpacing = 6
 
 let headlineAttributes: [NSAttributedString.Key: Any] = [
-    .font: NSFont.systemFont(ofSize: 78, weight: .bold),
+    .font: NSFont.systemFont(ofSize: 82, weight: .bold),
     .foregroundColor: NSColor(red: 0.11, green: 0.12, blue: 0.12, alpha: 1),
     .paragraphStyle: paragraph
 ]
 NSAttributedString(string: arguments.headline, attributes: headlineAttributes)
-    .draw(with: topRect(x: 90, y: 105, width: 1110, height: 275), options: [.usesLineFragmentOrigin, .usesFontLeading])
+    .draw(with: topRect(x: 72, y: 62, width: 1146, height: 240), options: [.usesLineFragmentOrigin, .usesFontLeading])
 
 if !arguments.subheadline.isEmpty {
     let subheadlineAttributes: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: 38, weight: .medium),
+        .font: NSFont.systemFont(ofSize: 36, weight: .semibold),
         .foregroundColor: NSColor(red: 0.40, green: 0.39, blue: 0.36, alpha: 1),
         .paragraphStyle: paragraph
     ]
     NSAttributedString(string: arguments.subheadline, attributes: subheadlineAttributes)
-        .draw(with: topRect(x: 120, y: 405, width: 1050, height: 130), options: [.usesLineFragmentOrigin, .usesFontLeading])
+        .draw(with: topRect(x: 105, y: 315, width: 1080, height: 82), options: [.usesLineFragmentOrigin, .usesFontLeading])
 }
 
-// 上1/3をコピー、下2/3を端末画面に割り当てるスプリットレイアウト。
-// 端末を下端から少しはみ出させ、背景を端まで使うfull-bleedな印象も加える。
-let deviceRect = topRect(x: 105, y: 710, width: 1080, height: 2288)
-let devicePath = NSBezierPath(roundedRect: deviceRect, xRadius: 112, yRadius: 112)
+// 検索結果の縮小表示でも実画面が主役になるよう、コピー領域は上約1/5に圧縮する。
+// 端末は左右余白を抑えて大きく見せ、下端から少しはみ出すdevice-hero構図にする。
+let deviceRect = topRect(x: 78, y: 445, width: 1134, height: 2440)
+let devicePath = NSBezierPath(roundedRect: deviceRect, xRadius: 108, yRadius: 108)
 NSColor(red: 0.08, green: 0.085, blue: 0.09, alpha: 1).setFill()
 devicePath.fill()
 
-let screenRect = deviceRect.insetBy(dx: 26, dy: 26)
-let screenPath = NSBezierPath(roundedRect: screenRect, xRadius: 88, yRadius: 88)
+let screenRect = deviceRect.insetBy(dx: 22, dy: 22)
+let screenPath = NSBezierPath(roundedRect: screenRect, xRadius: 86, yRadius: 86)
 NSGraphicsContext.saveGraphicsState()
 screenPath.addClip()
 
