@@ -125,8 +125,11 @@ NSGraphicsContext.restoreGraphicsState()
 
 NSGraphicsContext.restoreGraphicsState()
 
-guard let png = bitmap.representation(using: .png, properties: [:]) else { exit(1) }
 let outputURL = URL(fileURLWithPath: arguments.output)
+let isJPEG = ["jpg", "jpeg"].contains(outputURL.pathExtension.lowercased())
+let outputType: NSBitmapImageRep.FileType = isJPEG ? .jpeg : .png
+let properties: [NSBitmapImageRep.PropertyKey: Any] = isJPEG ? [.compressionFactor: 0.96] : [:]
+guard let imageData = bitmap.representation(using: outputType, properties: properties) else { exit(1) }
 try FileManager.default.createDirectory(at: outputURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-try png.write(to: outputURL, options: .atomic)
+try imageData.write(to: outputURL, options: .atomic)
 print("Generated \(outputURL.path)")

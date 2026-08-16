@@ -11,13 +11,16 @@
 
 「full-bleed」は背景や画像を端まで敷く表現を指します。今回の情報設計自体は、上にコピー、下に端末を置く「スプリット／エディトリアル構図」です。
 
-## 推奨する5枚
+## 2026年版の掲載順
 
-1. `撮るだけで、隠す候補を検出` — ホームまたは検出結果
-2. `隠す場所は、自分で確認できる` — 赤い候補枠の編集画面
-3. `黒塗りもモザイクも、すぐ確認` — マスキングスタイル画面
-4. `画像は端末の外へ送らない` — プライバシー画面
-5. `保存・共有まで、迷わず完了` — 書き出し画面
+検索結果に表示される最初の3枚だけで、価値・仕組み・完了結果が伝わる順番にします。
+
+1. `写真の個人情報を / かんたんに隠す` — 最終結果を先に見せる
+2. `住所や番号を / 端末内で自動検出` — 自動検出と手動確認を見せる
+3. `位置情報を残さず / 保存・共有` — 安全な書き出しを見せる
+4. `画像は端末内で処理 / 外部送信なし` — ダークモードとプライバシーを見せる
+
+見出しは句読点なしの2行、補足は句点なしの1行に統一します。中黒は並列する機能名にだけ使います。
 
 ## 生成方法
 
@@ -25,10 +28,24 @@ Simulatorで撮影したPNGを入力にして、App Store用1290×2796px画像�
 
 ```bash
 swift Scripts/generate_aso_screenshot.swift \
-  --input work/screenshots/detection.png \
-  --output docs/aso-screenshots/01-detection.png \
-  --headline "撮るだけで、隠す候補を検出" \
-  --subheadline "住所・番号・QRコードを端末内で見つけます"
+  --input work/screenshots/style.png \
+  --output docs/aso-screenshots/01-core-value.jpg \
+  --headline $'写真の個人情報を\nかんたんに隠す' \
+  --subheadline "黒塗りとモザイクで見せたい情報だけ残す"
 ```
 
 見出しは2行以内、補足は1行を基本とし、説明を増やすよりアプリ画面を大きく見せます。
+
+## 運用
+
+- App Storeには6.9インチ用の1290×2796px・アルファチャンネルなしのJPEGを登録する
+- 1枚目は価値訴求、2枚目は検出、3枚目は書き出しの順番を維持する
+- App Store ConnectのProduct Page Optimizationで、1枚目のコピーと画面の組み合わせをA/Bテストする
+- 日本語以外は直訳せず、各ロケールで2行以内に再構成する
+- UIが変わったら実画面を再撮影し、架空の画面を使わない
+
+参考：
+
+- https://developer.apple.com/app-store/product-page/
+- https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/
+- https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/
