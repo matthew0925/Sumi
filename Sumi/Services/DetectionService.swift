@@ -25,20 +25,33 @@ enum DetectionService {
 
         var regions: [MaskRegion] = []
 
+        let textFragments = textResults.compactMap { observation -> RecognizedTextFragment? in
+            guard let candidate = observation.topCandidates(1).first else { return nil }
+            return RecognizedTextFragment(text: candidate.string, boundingBox: observation.boundingBox)
+        }
+
         regions += textResults.map { observation in
             guard let candidate = observation.topCandidates(1).first else {
                 return MaskRegion(boundingBox: observation.boundingBox, kind: .text, isEnabled: false)
             }
             let text = candidate.string
             let recognizedBox = preciseNumericBoundingBox(in: candidate) ?? observation.boundingBox
+            let isMyNumberSecurityCode = documentType == .myNumberCard &&
+                isLikelyMyNumberSecurityCode(
+                    text: text,
+                    boundingBox: recognizedBox,
+                    fragments: textFragments
+                )
             return MaskRegion(
                 boundingBox: adjustedMaskBoundingBox(
                     for: text,
                     boundingBox: recognizedBox,
                     documentType: documentType
+                ).expandingForMyNumberSecurityCode(
+                    recognizedDigitCount: isMyNumberSecurityCode ? normalizedDigits(in: text).count : nil
                 ),
                 kind: .text,
-                isEnabled: looksLikePersonalInformation(text, documentType: documentType)
+                isEnabled: looksLikePersonalInformation(text, documentType: documentType) || isMyNumberSecurityCode
             )
         }
 
@@ -198,6 +211,39 @@ enum DetectionService {
         return false
     }
 
+    /// マイナンバーカード表面のセキュリティコードは、長いカード番号の
+    /// すぐ右隣に独立した4桁で印字される。小さいためVisionが先頭を落として
+    /// 3桁として返すことがあり、文字数だけでは見逃すので配置関係も使う。
+    static func isLikelyMyNumberSecurityCode(
+        text: String,
+        boundingBox: CGRect,
+        fragments: [RecognizedTextFragment]
+    ) -> Bool {
+        let digits = normalizedDigits(in: text)
+        guard (3...4).contains(digits.count),
+              normalizedCompactText(text).allSatisfy({ $0.isNumber }) else { return false }
+
+        return fragments.contains { fragment in
+            let anchor = normalizedCompactText(fragment.text)
+            let anchorDigits = anchor.filter(\.isNumber)
+            let containsLongCardIdentifier = anchor.count >= 10 && anchorDigits.count >= 8
+            let sameLineTolerance = max(boundingBox.height, fragment.boundingBox.height) * 1.2
+            let isOnSameLine = abs(fragment.boundingBox.midY - boundingBox.midY) <= sameLineTolerance
+            let horizontalGap = boundingBox.minX - fragment.boundingBox.maxX
+            let isImmediatelyToRight = horizontalGap >= -0.015 && horizontalGap <= 0.08
+            return containsLongCardIdentifier && isOnSameLine && isImmediatelyToRight
+        }
+    }
+
+    private static func normalizedCompactText(_ text: String) -> String {
+        let normalized = text.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? text
+        return normalized.filter { !$0.isWhitespace && !"-－".contains($0) }
+    }
+
+    private static func normalizedDigits(in text: String) -> String {
+        normalizedCompactText(text).filter(\.isNumber)
+    }
+
     /// Visionの矩形は認識文字に密着しており、アンチエイリアス部分や文字間の
     /// 断片が残ることがあるため、文字の高さに応じた余白を検出段階で加える。
     /// 「◯◯公安委員会」はVisionが「公安委員会」だけを切り出す場合があるため、
@@ -249,6 +295,12 @@ enum DetectionService {
     ]
 }
 
+/// OCR結果同士の位置関係を純粋関数として検証するための軽量な表現。
+struct RecognizedTextFragment: Equatable {
+    let text: String
+    let boundingBox: CGRect
+}
+
 private extension CGRect {
     var clampedToUnitSquare: CGRect {
         let x = min(max(minX, 0), 1)
@@ -267,6 +319,22 @@ private extension CGRect {
         let unionArea = width * height + other.width * other.height - intersectionArea
         guard unionArea > 0 else { return 0 }
         return intersectionArea / unionArea
+    }
+
+    /// OCRが4桁コードの先頭1桁を落とした場合、その1文字分だけ左へ広げる。
+    /// 右側やカード番号側まで一律に大きくせず、コードを独立した領域に保つ。
+    func expandingForMyNumberSecurityCode(recognizedDigitCount: Int?) -> CGRect {
+        guard let recognizedDigitCount else { return self }
+        let missingDigitCount = max(0, 4 - recognizedDigitCount)
+        guard missingDigitCount > 0 else { return self }
+        let digitWidth = width / CGFloat(max(recognizedDigitCount, 1))
+        let addedWidth = digitWidth * CGFloat(missingDigitCount)
+        return CGRect(
+            x: minX - addedWidth,
+            y: minY,
+            width: width + addedWidth,
+            height: height
+        ).clampedToUnitSquare
     }
 }
 

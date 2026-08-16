@@ -88,4 +88,40 @@ struct DetectionServiceTests {
         #expect(adjusted.maxX >= source.maxX + 0.14)
         #expect(adjusted.height > source.height + 0.04)
     }
+
+    @Test("カード番号の右隣にある3桁認識を4桁セキュリティコードとして補完する")
+    func myNumberSecurityCodeRecognizedAsThreeDigitsIsFlagged() {
+        let codeBox = CGRect(x: 0.31, y: 0.12, width: 0.035, height: 0.018)
+        let fragments = [
+            RecognizedTextFragment(
+                text: "0123456789ABCDEF",
+                boundingBox: CGRect(x: 0.08, y: 0.115, width: 0.22, height: 0.022)
+            ),
+            RecognizedTextFragment(text: "234", boundingBox: codeBox)
+        ]
+
+        #expect(DetectionService.isLikelyMyNumberSecurityCode(
+            text: "234",
+            boundingBox: codeBox,
+            fragments: fragments
+        ))
+    }
+
+    @Test("離れた3桁の日付断片はセキュリティコードと誤判定しない")
+    func unrelatedThreeDigitsAreNotSecurityCode() {
+        let codeBox = CGRect(x: 0.70, y: 0.55, width: 0.035, height: 0.018)
+        let fragments = [
+            RecognizedTextFragment(
+                text: "0123456789ABCDEF",
+                boundingBox: CGRect(x: 0.08, y: 0.115, width: 0.22, height: 0.022)
+            ),
+            RecognizedTextFragment(text: "202", boundingBox: codeBox)
+        ]
+
+        #expect(!DetectionService.isLikelyMyNumberSecurityCode(
+            text: "202",
+            boundingBox: codeBox,
+            fragments: fragments
+        ))
+    }
 }
