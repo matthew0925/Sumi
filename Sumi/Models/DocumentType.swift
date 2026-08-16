@@ -25,7 +25,11 @@ enum DocumentType: String, CaseIterable, Identifiable {
     var commonlyHiddenFields: [String] {
         switch self {
         case .driversLicense:
-            return ["住所", "生年月日", "免許証番号", "本籍（表示されている場合）"]
+            return [
+                "氏名・住所・生年月日", "免許証番号", "交付日・有効期限",
+                "免許の条件・取得年月日", "発行公安委員会・右側の印",
+                "本籍（表示されている場合）", "顔写真（用途に応じて）"
+            ]
         case .myNumberCard:
             return ["個人番号（12桁）", "住所", "生年月日", "QRコード"]
         case .healthInsuranceCard:
@@ -41,7 +45,7 @@ enum DocumentType: String, CaseIterable, Identifiable {
     var ocrCustomWords: [String] {
         switch self {
         case .driversLicense:
-            return ["運転免許証", "免許の条件等", "公安委員会", "優良"]
+            return ["運転免許証", "免許の条件等", "取得年月日", "公安委員会", "優良"]
         case .myNumberCard:
             return ["個人番号カード", "個人番号", "電子証明書", "臓器提供意思"]
         case .healthInsuranceCard:

@@ -1,4 +1,5 @@
 import Testing
+import CoreGraphics
 @testable import Sumi
 
 struct DetectionServiceTests {
@@ -50,5 +51,41 @@ struct DetectionServiceTests {
     func identityLabelIsFlagged() {
         #expect(DetectionService.looksLikePersonalInformation("氏名"))
         #expect(DetectionService.looksLikePersonalInformation("本籍"))
+        #expect(DetectionService.looksLikePersonalInformation("東京都公安委員会"))
+    }
+
+    @Test("丸印が3つ以上並ぶ文字列も候補として検出する")
+    func repeatedCircleSymbolsAreFlagged() {
+        #expect(DetectionService.looksLikePersonalInformation("○○○○○"))
+        #expect(DetectionService.looksLikePersonalInformation("◯◯◯"))
+    }
+
+    @Test("検出矩形には文字切れを防ぐ余白を加える")
+    func detectedBoundsReceiveAdaptivePadding() {
+        let source = CGRect(x: 0.30, y: 0.40, width: 0.20, height: 0.05)
+        let adjusted = DetectionService.adjustedMaskBoundingBox(
+            for: "1990年1月1日生",
+            boundingBox: source,
+            documentType: .driversLicense
+        )
+
+        #expect(adjusted.minX < source.minX)
+        #expect(adjusted.maxX > source.maxX)
+        #expect(adjusted.minY < source.minY)
+        #expect(adjusted.maxY > source.maxY)
+    }
+
+    @Test("公安委員会は発行地域を含むよう左側を広く確保する")
+    func issuingAuthorityExpandsTowardRegionName() {
+        let source = CGRect(x: 0.55, y: 0.05, width: 0.18, height: 0.04)
+        let adjusted = DetectionService.adjustedMaskBoundingBox(
+            for: "公安委員会",
+            boundingBox: source,
+            documentType: .driversLicense
+        )
+
+        #expect(adjusted.minX <= source.minX - 0.12)
+        #expect(adjusted.maxX >= source.maxX + 0.14)
+        #expect(adjusted.height > source.height + 0.04)
     }
 }

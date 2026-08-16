@@ -7,7 +7,7 @@ struct DocumentTypeView: View {
     var body: some View {
         List {
             Section {
-                Text("書類の種類ごとに、一般的によく隠される項目を確認できます。検出結果は次の画面で手動調整できます。")
+                Text("第三者への画像共有で、一般的によく隠される項目を確認できます。本人確認へ提出する場合は、提出先が指定する項目を隠さないでください。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -44,7 +44,7 @@ struct DocumentTypeView: View {
 
                         if expandedType == type {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("一般的によく隠される項目の例")
+                                Text("第三者への共有時に隠す項目の例")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                 ForEach(type.commonlyHiddenFields, id: \.self) { field in

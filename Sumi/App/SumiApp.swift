@@ -69,9 +69,15 @@ struct SumiApp: App {
         flow.startFlow(with: Self.snapshotSampleImage())
         flow.documentType = .driversLicense
         flow.regions = [
-            MaskRegion(boundingBox: CGRect(x: 0.11, y: 0.86, width: 0.52, height: 0.075), kind: .text),
-            MaskRegion(boundingBox: CGRect(x: 0.12, y: 0.72, width: 0.74, height: 0.08), kind: .text),
-            MaskRegion(boundingBox: CGRect(x: 0.20, y: 0.245, width: 0.55, height: 0.08), kind: .text)
+            MaskRegion(boundingBox: CGRect(x: 0.10, y: 0.85, width: 0.54, height: 0.09), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.62, y: 0.85, width: 0.35, height: 0.09), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.11, y: 0.70, width: 0.76, height: 0.10), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.15, y: 0.64, width: 0.50, height: 0.075), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.05, y: 0.54, width: 0.58, height: 0.12), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.13, y: 0.43, width: 0.18, height: 0.09), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.17, y: 0.22, width: 0.43, height: 0.11), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.13, y: 0.02, width: 0.26, height: 0.20), kind: .text),
+            MaskRegion(boundingBox: CGRect(x: 0.65, y: 0.00, width: 0.34, height: 0.17), kind: .text)
         ]
 
         switch step {

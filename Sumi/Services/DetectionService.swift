@@ -26,9 +26,17 @@ enum DetectionService {
         var regions: [MaskRegion] = []
 
         regions += textResults.map { observation in
-            let text = observation.topCandidates(1).first?.string ?? ""
+            guard let candidate = observation.topCandidates(1).first else {
+                return MaskRegion(boundingBox: observation.boundingBox, kind: .text, isEnabled: false)
+            }
+            let text = candidate.string
+            let recognizedBox = preciseNumericBoundingBox(in: candidate) ?? observation.boundingBox
             return MaskRegion(
-                boundingBox: observation.boundingBox,
+                boundingBox: adjustedMaskBoundingBox(
+                    for: text,
+                    boundingBox: recognizedBox,
+                    documentType: documentType
+                ),
                 kind: .text,
                 isEnabled: looksLikePersonalInformation(text, documentType: documentType)
             )
@@ -76,7 +84,7 @@ enum DetectionService {
                 try handler.perform([request])
                 for observation in request.results ?? [] {
                     let isDuplicate = merged.contains {
-                        $0.boundingBox.isApproximately(observation.boundingBox)
+                        $0.boundingBox.intersectionOverUnion(with: observation.boundingBox) >= 0.72
                     }
                     if !isDuplicate {
                         merged.append(observation)
@@ -88,6 +96,25 @@ enum DetectionService {
         }
 
         return merged
+    }
+
+    /// Visionが「番号 第 012345678900 号」のように1行で返した場合でも、
+    /// 実際の数字部分だけの矩形を取得して周辺項目を巻き込まないようにする。
+    private static func preciseNumericBoundingBox(in candidate: VNRecognizedText) -> CGRect? {
+        let text = candidate.string
+        guard let expression = try? NSRegularExpression(
+            pattern: #"[0-9０-９][0-9０-９\s\-－]{2,}[0-9０-９]"#
+        ) else { return nil }
+
+        let fullRange = NSRange(text.startIndex..<text.endIndex, in: text)
+        let matches = expression.matches(in: text, range: fullRange)
+        guard let match = matches.max(by: { $0.range.length < $1.range.length }),
+              let stringRange = Range(match.range, in: text) else { return nil }
+
+        let matchedText = String(text[stringRange])
+        guard matchedText.filter(\.isNumber).count >= 4,
+              let rectangle = try? candidate.boundingBox(for: stringRange) else { return nil }
+        return rectangle.boundingBox
     }
 
     private static func detectBarcodes(handler: VNImageRequestHandler) -> [VNBarcodeObservation] {
@@ -121,6 +148,12 @@ enum DetectionService {
         let compact = normalized.replacingOccurrences(of: " ", with: "")
         let digitsOnly = compact.filter(\.isNumber)
 
+        // fullwidthToHalfwidthで「○」が半角白丸「￮」へ変換されるケースも含める。
+        let circleCharacters = compact.filter { "○◯〇￮Oo".contains($0) }
+        if circleCharacters.count >= 3 {
+            return true
+        }
+
         // 12桁の個人番号（マイナンバー）や免許証番号・生年月日などに典型的な数字の並び。
         // Visionは長い番号を複数の断片に分割して認識することがあるため、
         // 断片単位でも見逃さないよう閾値は低めに設定している
@@ -131,7 +164,9 @@ enum DetectionService {
 
         let personalInformationLabels = [
             "氏名", "名前", "住所", "生年月日", "個人番号", "免許証番号", "旅券番号",
-            "保険者番号", "記号", "本籍", "性別", "交付", "有効期限", "国籍"
+            "保険者番号", "記号", "本籍", "性別", "交付", "有効期限", "国籍",
+            "公安委員会", "公安", "委員会", "発行者", "発行元", "免許の条件",
+            "条件等", "取得年月日", "種別"
         ]
         if personalInformationLabels.contains(where: compact.contains) {
             return true
@@ -163,20 +198,75 @@ enum DetectionService {
         return false
     }
 
+    /// Visionの矩形は認識文字に密着しており、アンチエイリアス部分や文字間の
+    /// 断片が残ることがあるため、文字の高さに応じた余白を検出段階で加える。
+    /// 「◯◯公安委員会」はVisionが「公安委員会」だけを切り出す場合があるため、
+    /// 発行地域を含められるよう左側を広めに確保する。
+    static func adjustedMaskBoundingBox(
+        for text: String,
+        boundingBox: CGRect,
+        documentType: DocumentType = .other
+    ) -> CGRect {
+        let normalized = text.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? text
+        let compact = normalized.replacingOccurrences(of: " ", with: "")
+        let horizontalPadding = max(0.008, boundingBox.height * 0.22)
+        let verticalPadding = max(0.005, boundingBox.height * 0.18)
+
+        var leftPadding = horizontalPadding
+        var rightPadding = horizontalPadding
+        if documentType == .driversLicense,
+           compact.contains("公安委員会") || compact.contains("公安") || compact.contains("委員会") {
+            leftPadding = max(0.12, boundingBox.width * 0.65)
+            // 右隣の発行印・照合印も同じ発行者情報として覆う。
+            rightPadding = max(0.15, boundingBox.width * 0.70)
+        }
+
+        // 生年月日や番号はVisionが末尾を別断片にしやすいため、左右の余白を
+        // 最低2%確保する。DocumentTypeを受け取るのは書類別補正を拡張しやすくするため。
+        if compact.contains("生年月日") {
+            leftPadding = max(leftPadding, 0.02)
+            rightPadding = max(rightPadding, 0.02)
+        }
+        let authorityVerticalPadding: CGFloat
+        if documentType == .driversLicense,
+           compact.contains("公安委員会") || compact.contains("公安") || compact.contains("委員会") {
+            authorityVerticalPadding = max(verticalPadding, 0.025)
+        } else {
+            authorityVerticalPadding = verticalPadding
+        }
+        return CGRect(
+            x: boundingBox.minX - leftPadding,
+            y: boundingBox.minY - authorityVerticalPadding,
+            width: boundingBox.width + leftPadding + rightPadding,
+            height: boundingBox.height + authorityVerticalPadding * 2
+        ).clampedToUnitSquare
+    }
+
     private static let japaneseIdentityDocumentTerms = [
         "氏名", "住所", "生年月日", "個人番号", "運転免許証", "健康保険証",
-        "旅券番号", "本籍", "有効期限", "臓器提供意思", "保険者番号"
+        "旅券番号", "本籍", "有効期限", "臓器提供意思", "保険者番号", "公安委員会",
+        "免許の条件等", "取得年月日"
     ]
 }
 
 private extension CGRect {
-    /// 正規化座標系での「ほぼ同じ位置・大きさ」判定。
-    /// .accurateと.fastそれぞれの結果を合成する際、同一箇所の重複行を弾くために使う。
-    func isApproximately(_ other: CGRect, tolerance: CGFloat = 0.02) -> Bool {
-        abs(origin.x - other.origin.x) < tolerance
-            && abs(origin.y - other.origin.y) < tolerance
-            && abs(width - other.width) < tolerance
-            && abs(height - other.height) < tolerance
+    var clampedToUnitSquare: CGRect {
+        let x = min(max(minX, 0), 1)
+        let y = min(max(minY, 0), 1)
+        let maxX = min(max(self.maxX, 0), 1)
+        let maxY = min(max(self.maxY, 0), 1)
+        return CGRect(x: x, y: y, width: max(0, maxX - x), height: max(0, maxY - y))
+    }
+
+    /// 座標の近さではなく実際の重なり率で同じOCR結果かを判定する。
+    /// 小さく隣接する文字を誤って重複扱いしないためのIoU（Intersection over Union）。
+    func intersectionOverUnion(with other: CGRect) -> CGFloat {
+        let intersection = intersection(other)
+        guard !intersection.isNull, intersection.width > 0, intersection.height > 0 else { return 0 }
+        let intersectionArea = intersection.width * intersection.height
+        let unionArea = width * height + other.width * other.height - intersectionArea
+        guard unionArea > 0 else { return 0 }
+        return intersectionArea / unionArea
     }
 }
 
