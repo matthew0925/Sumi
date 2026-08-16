@@ -39,6 +39,7 @@
 		D7B3262E9274DDC42F8065D8 /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC0D73CB20BC3B461A43811 /* PurchaseView.swift */; };
 		ED730B129F7A113673AA3C01 /* SumiShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8D2CA75C29103D93CA7F50 /* SumiShortcuts.swift */; };
 		F14092845C7D4449E6364AF6 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83246A8859D7E72823D770 /* CameraCaptureView.swift */; };
+		F6FFC8F036A4F162D50F3EEA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 098072BE514E87033045DCC1 /* PrivacyInfo.xcprivacy */; };
 		F858950C9643F39A30664AB7 /* RevenueCatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E0C7551AFB2BD0E76ACD9D /* RevenueCatConfig.swift */; };
 		FC5861CE71AB9F2DF399E463 /* DocumentTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898A88F74722E0C09407615 /* DocumentTypeView.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 /* Begin PBXFileReference section */
 		002E64E21CFFB3AEE1898C93 /* DocumentTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTypeTests.swift; sourceTree = "<group>"; };
 		033FBCCE29A3A6833376994F /* MaskingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingFlow.swift; sourceTree = "<group>"; };
+		098072BE514E87033045DCC1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0A830A864448339EEE50569D /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		118D30DC90ADA77B763254FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		17B75C8395F2BA2E8F23BAA5 /* MaskingStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskingStyleView.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 			children = (
 				118D30DC90ADA77B763254FE /* Assets.xcassets */,
 				63719E4EC33AAA0B14581CB2 /* Info.plist */,
+				098072BE514E87033045DCC1 /* PrivacyInfo.xcprivacy */,
 				67DC3463F170395E1652FA89 /* Sumi.entitlements */,
 				013F9DFDC72BE894E2C664A6 /* App */,
 				CD2F58F5EDAF70A3677A1AA2 /* Features */,
@@ -416,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A99EA4AE0C2350B54488A90D /* Assets.xcassets in Resources */,
+				F6FFC8F036A4F162D50F3EEA /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,10 +9,11 @@ struct ExportPreviewView: View {
     @State private var zoomScale: CGFloat = 1
     @State private var lastZoomScale: CGFloat = 1
     @State private var didSave = false
+    @State private var exportedImage: UIImage?
 
     var body: some View {
         VStack(spacing: 24) {
-            if let image = renderedImage {
+            if let image = exportedImage {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -62,7 +63,7 @@ struct ExportPreviewView: View {
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
 
-                    if let image = renderedImage {
+                    if let image = exportedImage {
                         ShareLink(
                             item: Image(uiImage: image),
                             preview: SharePreview("Sumiで作成した画像", image: Image(uiImage: image))
@@ -103,6 +104,10 @@ struct ExportPreviewView: View {
         }
         .navigationTitle("書き出し")
         .navigationBarTitleDisplayMode(.inline)
+        .task { refreshExportedImage() }
+        .onChange(of: purchaseManager.isWatermarkRemoved) { _, _ in
+            refreshExportedImage()
+        }
         .alert(saveFailed ? "保存できませんでした" : "保存しました", isPresented: saveAlertIsPresented) {
             Button("OK") { saveMessage = nil }
         } message: {
@@ -110,9 +115,9 @@ struct ExportPreviewView: View {
         }
     }
 
-    private var renderedImage: UIImage? {
-        guard let source = flow.sourceImage else { return nil }
-        return ImageMaskingService.renderMaskedImage(
+    private func refreshExportedImage() {
+        guard let source = flow.sourceImage else { return }
+        exportedImage = ImageMaskingService.renderMaskedImage(
             source: source,
             regions: flow.regions,
             style: flow.maskingStyle,
@@ -122,7 +127,7 @@ struct ExportPreviewView: View {
     }
 
     private func saveToPhotos() {
-        guard let image = renderedImage else { return }
+        guard let image = exportedImage else { return }
         Task {
             let authorization = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
             guard authorization == .authorized || authorization == .limited else {
@@ -139,6 +144,7 @@ struct ExportPreviewView: View {
                 saveFailed = false
                 saveMessage = "カメラロールに保存しました。"
                 didSave = true
+                flow.discardSensitiveWorkingData()
                 Haptics.success()
             } catch {
                 saveFailed = true

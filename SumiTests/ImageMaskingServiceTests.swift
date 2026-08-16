@@ -18,6 +18,25 @@ struct ImageMaskingServiceTests {
         #expect(!applied[2].isEnabled)
     }
 
+    @Test("安全余白はマスク領域を広げ、画像端で切り詰める")
+    func expandsAndClampsSafetyPadding() {
+        let center = CGRect(x: 0.4, y: 0.4, width: 0.2, height: 0.2)
+        let expanded = ImageMaskingService.expandedBoundingBox(center, safetyPadding: .wide)
+        #expect(expanded.minX < center.minX)
+        #expect(expanded.minY < center.minY)
+        #expect(expanded.maxX > center.maxX)
+        #expect(expanded.maxY > center.maxY)
+
+        let edge = ImageMaskingService.expandedBoundingBox(
+            CGRect(x: 0, y: 0, width: 0.1, height: 0.1),
+            safetyPadding: .maximum
+        )
+        #expect(edge.minX == 0)
+        #expect(edge.minY == 0)
+        #expect(edge.maxX <= 1)
+        #expect(edge.maxY <= 1)
+    }
+
     @Test("Visionの正規化座標（左下原点）が画面ピクセル座標（左上原点）に変換される")
     func convertsBottomLeftOriginToTopLeftOrigin() {
         let size = CGSize(width: 1000, height: 500)

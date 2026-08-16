@@ -34,6 +34,12 @@ struct SumiApp: App {
             .environmentObject(flow)
             .environmentObject(purchaseManager)
             .environmentObject(IntentBridge.shared)
+            .onChange(of: flow.path) { _, path in
+                // 戻る操作で処理フローを終了した場合も、元画像と検出位置を残さない。
+                if path.isEmpty, flow.sourceImage != nil {
+                    flow.discardSensitiveWorkingData()
+                }
+            }
             .onOpenURL { url in
                 handle(url: url)
             }

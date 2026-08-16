@@ -2,7 +2,7 @@ import Foundation
 
 /// アプリ本体とShare Extensionの間で、共有シートから渡された画像を1枚だけ
 /// 受け渡すためのApp Groupコンテナ。渡した画像は読み取り側が読み込み次第すぐ削除する
-/// （書き出し後は破棄する、という本アプリの一時ファイル方針をExtension経由でも維持する）。
+/// （本体アプリが読み込んだ直後に破棄し、受け渡しファイルを残さない）。
 enum SharedContainer {
     static let appGroupID = "group.com.matthew0925.sumi"
 

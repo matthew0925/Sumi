@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import Sumi
 
@@ -13,5 +14,21 @@ struct DocumentTypeTests {
         #expect(type.recommendedMaskKinds.contains(.text))
         #expect(type.recommendedMaskKinds.contains(.barcode))
         #expect(!type.recommendedMaskKinds.contains(.face))
+    }
+
+    @Test("プリセットは保存後に同じ内容で復元できる")
+    func presetRoundTrip() throws {
+        let suiteName = "MaskingPresetStoreTests.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let preset = MaskingPreset(
+            name: "SNS投稿用",
+            style: .mosaic,
+            safetyPadding: .maximum,
+            enabledKinds: [.text, .face]
+        )
+
+        #expect(MaskingPresetStore.save([preset], defaults: defaults))
+        #expect(MaskingPresetStore.load(defaults: defaults) == [preset])
     }
 }

@@ -28,10 +28,7 @@ enum ImageMaskingService {
 
             let cgContext = context.cgContext
             for region in regions where region.isEnabled {
-                let paddedBox = region.boundingBox.insetBy(
-                    dx: -safetyPadding.normalizedInset,
-                    dy: -safetyPadding.normalizedInset
-                )
+                let paddedBox = expandedBoundingBox(region.boundingBox, safetyPadding: safetyPadding)
                 let rect = convert(paddedBox, to: size)
                 switch style {
                 case .solidBlack:
@@ -52,6 +49,18 @@ enum ImageMaskingService {
                 drawWatermark(in: size)
             }
         }
+    }
+
+    static func expandedBoundingBox(
+        _ boundingBox: CGRect,
+        safetyPadding: MaskSafetyPadding
+    ) -> CGRect {
+        MaskRegion.clampedToUnitSquare(
+            boundingBox.insetBy(
+                dx: -safetyPadding.normalizedInset,
+                dy: -safetyPadding.normalizedInset
+            )
+        )
     }
 
     /// Visionの正規化座標（左下原点）をUIKit座標（左上原点）のピクセル矩形に変換する。

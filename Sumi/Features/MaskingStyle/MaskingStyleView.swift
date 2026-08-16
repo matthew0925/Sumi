@@ -9,87 +9,91 @@ struct MaskingStyleView: View {
     @State private var presetMessage: String?
 
     var body: some View {
-        VStack(spacing: 24) {
-            if let preview = previewImage {
-                Image(uiImage: preview)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(12)
-                    .background(Color(uiColor: .secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(Color(uiColor: .separator), lineWidth: 0.5)
+        VStack(spacing: 12) {
+            ScrollView {
+                VStack(spacing: 24) {
+                    if let preview = previewImage {
+                        Image(uiImage: preview)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 420)
+                            .padding(12)
+                            .background(Color(uiColor: .secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .stroke(Color(uiColor: .separator), lineWidth: 0.5)
+                            }
+                            .padding(.horizontal)
+                    }
+
+                    Picker("マスキングスタイル", selection: $flow.maskingStyle) {
+                        ForEach(MaskingStyle.allCases) { style in
+                            Text(style.displayName).tag(style)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Label("安全余白", systemImage: "rectangle.expand.vertical")
+                            Spacer()
+                            if !purchaseManager.isWatermarkRemoved {
+                                Image(systemName: "lock.fill")
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .font(.subheadline.weight(.semibold))
+
+                        Picker("安全余白", selection: $flow.safetyPadding) {
+                            ForEach(MaskSafetyPadding.allCases) { padding in
+                                Text(padding.displayName).tag(padding)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .disabled(!purchaseManager.isWatermarkRemoved)
+
+                        Text("検出枠より外側まで隠し、文字の端が残るリスクを減らします。")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Button {
+                            guard purchaseManager.isWatermarkRemoved else {
+                                flow.path.append(.purchase)
+                                return
+                            }
+                            presetName = ""
+                            showingPresetName = true
+                        } label: {
+                            Label("現在の設定をプリセットに保存", systemImage: purchaseManager.isWatermarkRemoved ? "plus.square.on.square" : "lock")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+
+                        if purchaseManager.isWatermarkRemoved, !presets.isEmpty {
+                            Menu {
+                                Section("適用") {
+                                    ForEach(presets) { preset in
+                                        Button(preset.name) { apply(preset) }
+                                    }
+                                }
+                                Section("削除") {
+                                    ForEach(presets) { preset in
+                                        Button(preset.name, role: .destructive) { delete(preset) }
+                                    }
+                                }
+                            } label: {
+                                Label("保存済みプリセット（\(presets.count)）", systemImage: "square.stack")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                        }
                     }
                     .padding(.horizontal)
+                }
+                .padding(.vertical, 12)
             }
-
-            Picker("マスキングスタイル", selection: $flow.maskingStyle) {
-                ForEach(MaskingStyle.allCases) { style in
-                    Text(style.displayName).tag(style)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
-
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Label("安全余白", systemImage: "rectangle.expand.vertical")
-                    Spacer()
-                    if !purchaseManager.isWatermarkRemoved {
-                        Image(systemName: "lock.fill")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .font(.subheadline.weight(.semibold))
-
-                Picker("安全余白", selection: $flow.safetyPadding) {
-                    ForEach(MaskSafetyPadding.allCases) { padding in
-                        Text(padding.displayName).tag(padding)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .disabled(!purchaseManager.isWatermarkRemoved)
-
-                Text("検出枠より外側まで隠し、文字の端が残るリスクを減らします。")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Button {
-                    guard purchaseManager.isWatermarkRemoved else {
-                        flow.path.append(.purchase)
-                        return
-                    }
-                    presetName = ""
-                    showingPresetName = true
-                } label: {
-                    Label("現在の設定をプリセットに保存", systemImage: purchaseManager.isWatermarkRemoved ? "plus.square.on.square" : "lock")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-
-                if purchaseManager.isWatermarkRemoved, !presets.isEmpty {
-                    Menu {
-                        Section("適用") {
-                            ForEach(presets) { preset in
-                                Button(preset.name) { apply(preset) }
-                            }
-                        }
-                        Section("削除") {
-                            ForEach(presets) { preset in
-                                Button(preset.name, role: .destructive) { delete(preset) }
-                            }
-                        }
-                    } label: {
-                        Label("保存済みプリセット（\(presets.count)）", systemImage: "square.stack")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                }
-            }
-            .padding(.horizontal)
-
-            Spacer()
 
             Button {
                 flow.path.append(.export)

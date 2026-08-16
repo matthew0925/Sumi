@@ -31,6 +31,14 @@ final class MaskingFlow: ObservableObject {
         safetyPadding = .standard
     }
 
+    /// 保存後に再利用する必要がない元画像と検出座標だけを即時破棄する。
+    /// 書き出し済み画像はExportPreviewViewが画面表示中のみ保持する。
+    func discardSensitiveWorkingData() {
+        sourceImage = nil
+        regions.removeAll()
+        documentType = .other
+    }
+
     func startFlow(with image: UIImage) {
         sourceImage = Self.preparedForProcessing(image)
         documentType = .other

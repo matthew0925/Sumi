@@ -45,8 +45,8 @@ struct SettingsView: View {
                         )
                         privacyItem(
                             icon: "trash",
-                            title: "一時ファイルは自動で破棄されます",
-                            description: "処理中の一時データはアプリのサンドボックス内にのみ保持され、書き出し完了後に破棄されます。"
+                            title: "作業データは保存後に破棄します",
+                            description: "元画像と検出位置は処理中だけメモリに保持し、保存完了後に破棄します。共有機能から受け取った一時ファイルも読み込み直後に削除します。"
                         )
                     }
                     .padding(.vertical, 4)

@@ -142,6 +142,8 @@ struct HomeView: View {
 
 #Preview {
     NavigationStack {
-        HomeView().environmentObject(MaskingFlow())
+        HomeView()
+            .environmentObject(MaskingFlow())
+            .environmentObject(IntentBridge.shared)
     }
 }

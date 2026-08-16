@@ -39,6 +39,22 @@ struct MaskingFlowTests {
         #expect(flow.safetyPadding == .standard)
     }
 
+    @Test("保存後は元画像と検出座標だけを破棄する")
+    func discardsSensitiveWorkingDataAfterSave() {
+        let flow = MaskingFlow()
+        flow.startFlow(with: UIImage())
+        flow.documentType = .passport
+        flow.regions = [MaskRegion(boundingBox: .zero, kind: .text)]
+        flow.path = [.documentType, .detectionPreview, .maskingStyle, .export]
+
+        flow.discardSensitiveWorkingData()
+
+        #expect(flow.sourceImage == nil)
+        #expect(flow.regions.isEmpty)
+        #expect(flow.documentType == .other)
+        #expect(flow.path.last == .export)
+    }
+
     @Test("高解像度画像は向きを正規化して長辺4096px以内へ縮小される")
     func preparesLargeImageForProcessing() {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 5000, height: 2500))
