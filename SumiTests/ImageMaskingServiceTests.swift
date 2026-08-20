@@ -18,6 +18,23 @@ struct ImageMaskingServiceTests {
         #expect(!applied[2].isEnabled)
     }
 
+    @Test("種別ルール適用は手動追加領域のON/OFFを変更しない")
+    func appliesEnabledKindsPreservesManualRegions() {
+        // .manualはユーザーがこの写真の特定の場所を見て個別に追加した領域なので、
+        // 書類の推奨ルールやプリセットの一括適用で勝手にOFFにされてはいけない
+        // （自動検出が見逃した箇所を隠す意図が上書きされ、無防備な状態で
+        // 書き出されてしまう事故につながるため）。
+        let regions = [
+            MaskRegion(boundingBox: .zero, kind: .manual, isEnabled: true),
+            MaskRegion(boundingBox: .zero, kind: .manual, isEnabled: false)
+        ]
+
+        let applied = MaskRegion.applying(enabledKinds: [.text, .barcode], to: regions)
+
+        #expect(applied[0].isEnabled)
+        #expect(!applied[1].isEnabled)
+    }
+
     @Test("安全余白はマスク領域を広げ、画像端で切り詰める")
     func expandsAndClampsSafetyPadding() {
         let center = CGRect(x: 0.4, y: 0.4, width: 0.2, height: 0.2)

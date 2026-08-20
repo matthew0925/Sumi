@@ -107,6 +107,29 @@ struct DetectionServiceTests {
         ))
     }
 
+    @Test("番号だけの行では数字部分の範囲を返す")
+    func numericOnlyLineNarrowsBoundingBox() {
+        let text = "第 012345678900 号"
+        let range = DetectionService.numericOnlyMatchRange(in: text)
+        #expect(range != nil)
+    }
+
+    @Test("住所名と番地が混在する行では数字だけに矩形を狭めない")
+    func mixedAddressLineDoesNotNarrowBoundingBox() {
+        // 番地の桁数がたまたま4桁以上でも、住所名部分（東京都渋谷区代々木）を
+        // マスクせずに残すことになってはいけない。
+        let text = "東京都渋谷区代々木２丁目３４－５６"
+        let range = DetectionService.numericOnlyMatchRange(in: text)
+        #expect(range == nil)
+    }
+
+    @Test("マイナンバーの12桁だけの行では矩形を狭める")
+    func myNumberOnlyLineNarrowsBoundingBox() {
+        let text = "012345678900"
+        let range = DetectionService.numericOnlyMatchRange(in: text)
+        #expect(range != nil)
+    }
+
     @Test("離れた3桁の日付断片はセキュリティコードと誤判定しない")
     func unrelatedThreeDigitsAreNotSecurityCode() {
         let codeBox = CGRect(x: 0.70, y: 0.55, width: 0.035, height: 0.018)

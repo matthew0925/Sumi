@@ -11,8 +11,15 @@ struct MaskRegion: Identifiable, Equatable {
         case manual
     }
 
+    /// 書類種別の推奨ルールや保存済みプリセットを、種類（kind）ベースで一括適用する。
+    /// `.manual`領域はユーザーがこの写真の特定の場所を見て個別に描いたもので、
+    /// 「種類」による一般ルールの対象ではない。ここで一括ON/OFFしてしまうと、
+    /// 自動検出が見逃した箇所を手動で隠した意図がプリセット適用のたびに
+    /// 上書きされ、書き出し直前に無防備な状態へ戻ってしまう恐れがあるため、
+    /// `.manual`領域は現在の状態のまま変更しない。
     static func applying(enabledKinds: Set<Kind>, to regions: [MaskRegion]) -> [MaskRegion] {
         regions.map { region in
+            guard region.kind != .manual else { return region }
             var updated = region
             updated.isEnabled = enabledKinds.contains(region.kind)
             return updated

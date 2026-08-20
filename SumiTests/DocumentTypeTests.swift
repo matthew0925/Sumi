@@ -14,6 +14,9 @@ struct DocumentTypeTests {
         #expect(type.recommendedMaskKinds.contains(.text))
         #expect(type.recommendedMaskKinds.contains(.barcode))
         #expect(!type.recommendedMaskKinds.contains(.face))
+        // .manualは種類ベースの一括ルールの対象外（MaskRegion.applyingが個別に無視する）なので、
+        // ここに含めても意味がない。
+        #expect(!type.recommendedMaskKinds.contains(.manual))
     }
 
     @Test("プリセットは保存後に同じ内容で復元できる")

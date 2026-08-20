@@ -115,6 +115,21 @@ enum DetectionService {
     /// 実際の数字部分だけの矩形を取得して周辺項目を巻き込まないようにする。
     private static func preciseNumericBoundingBox(in candidate: VNRecognizedText) -> CGRect? {
         let text = candidate.string
+        guard let stringRange = numericOnlyMatchRange(in: text),
+              let rectangle = try? candidate.boundingBox(for: stringRange) else { return nil }
+        return rectangle.boundingBox
+    }
+
+    /// `preciseNumericBoundingBox`の純粋な文字列判定部分。VNRecognizedTextに
+    /// 依存しないため、テストから直接検証できるようinternalにしている。
+    ///
+    /// 「東京都渋谷区代々木２丁目３４－５６」のように、数字部分の桁数が
+    /// たまたま閾値を超えるだけで、行の大部分が住所名など数字以外の意味のある
+    /// 内容という行もある。そうした行で矩形を数字だけに狭めると、住所名の部分が
+    /// マスクされずに残ってしまう（隠したつもりが隠れていない状態）。
+    /// 数字部分を除いた残りが「第」「号」等のラベル語程度に収まる場合のみ
+    /// 矩形を狭め、それ以外はnilを返して行全体の矩形をそのまま使わせる。
+    static func numericOnlyMatchRange(in text: String) -> Range<String.Index>? {
         guard let expression = try? NSRegularExpression(
             pattern: #"[0-9０-９][0-9０-９\s\-－]{2,}[0-9０-９]"#
         ) else { return nil }
@@ -125,9 +140,14 @@ enum DetectionService {
               let stringRange = Range(match.range, in: text) else { return nil }
 
         let matchedText = String(text[stringRange])
-        guard matchedText.filter(\.isNumber).count >= 4,
-              let rectangle = try? candidate.boundingBox(for: stringRange) else { return nil }
-        return rectangle.boundingBox
+        guard matchedText.filter(\.isNumber).count >= 4 else { return nil }
+
+        let remainder = text.replacingOccurrences(of: matchedText, with: "")
+        let numericFieldLabels = Set("第号No.:：　 ")
+        let meaningfulRemainder = remainder.filter { !numericFieldLabels.contains($0) && !$0.isWhitespace }
+        guard meaningfulRemainder.count <= 2 else { return nil }
+
+        return stringRange
     }
 
     private static func detectBarcodes(handler: VNImageRequestHandler) -> [VNBarcodeObservation] {

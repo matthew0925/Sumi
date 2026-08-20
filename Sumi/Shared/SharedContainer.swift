@@ -27,14 +27,13 @@ enum SharedContainer {
     }
 
     /// アプリ本体側から呼ぶ。渡された画像を読み込み、読み込み後は即座に削除する。
+    /// 削除は後始末のベストエフォートであり、削除に失敗しても既に読み込めた
+    /// 画像データ自体は正常なので、ユーザーに「共有に失敗した」と誤って
+    /// 見せないよう読み込み成功を優先して返す。
     static func consumeHandoffImage() -> Data? {
         guard let url = handoffImageURL,
               let data = try? Data(contentsOf: url) else { return nil }
-        do {
-            try FileManager.default.removeItem(at: url)
-        } catch {
-            return nil
-        }
+        try? FileManager.default.removeItem(at: url)
         return data
     }
 }

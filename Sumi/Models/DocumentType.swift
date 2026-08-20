@@ -62,9 +62,9 @@ enum DocumentType: String, CaseIterable, Identifiable {
     var recommendedMaskKinds: Set<MaskRegion.Kind> {
         switch self {
         case .driversLicense, .myNumberCard, .healthInsuranceCard, .passport:
-            return [.text, .barcode, .manual]
+            return [.text, .barcode]
         case .other:
-            return [.text, .barcode, .manual]
+            return [.text, .barcode]
         }
     }
 }
