@@ -1,10 +1,12 @@
+import AVFoundation
 import SwiftUI
 import PhotosUI
 
 struct HomeView: View {
     @EnvironmentObject private var flow: MaskingFlow
     @EnvironmentObject private var intentBridge: IntentBridge
-    @State private var showCamera = false
+    @State private var showGuidedCamera = false
+    @State private var showLegacyCamera = false
     @State private var photoPickerItem: PhotosPickerItem?
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var showSettings = false
@@ -56,9 +58,18 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity, minHeight: geometry.size.height)
             }
         }
-        .sheet(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: $showGuidedCamera) {
+            GuidedCameraView { image in
+                showGuidedCamera = false
+                if let image {
+                    flow.startFlow(with: image)
+                }
+            }
+            .ignoresSafeArea()
+        }
+        .sheet(isPresented: $showLegacyCamera) {
             CameraCaptureView { image in
-                showCamera = false
+                showLegacyCamera = false
                 if let image {
                     flow.startFlow(with: image)
                 }
@@ -122,8 +133,13 @@ struct HomeView: View {
     }
 
     private func openCameraIfAvailable() {
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            showCamera = true
+        // 実機の背面カメラがあれば、傾き・枠合わせガイド付きのカメラを使う。
+        // Simulator等、AVFoundationから実カメラデバイスが見えない環境では
+        // ガイド撮影は成立しないため、システム標準のカメラピッカーにフォールバックする。
+        if AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) != nil {
+            showGuidedCamera = true
+        } else if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            showLegacyCamera = true
         } else {
             showCameraUnavailableAlert = true
         }

@@ -1,5 +1,6 @@
 import Vision
 import UIKit
+import CoreImage
 
 /// テキスト領域・バーコード/QR領域をオンデバイスで検出し、マスク候補として返す。
 /// 意味解釈は行わず「検出→候補提示→人間が最終確認」に徹する。
@@ -14,7 +15,10 @@ enum DetectionService {
 
     private static func detectCandidatesSynchronously(in image: UIImage, documentType: DocumentType) -> [MaskRegion] {
         guard let cgImage = image.cgImage else { return [] }
-        let handler = VNImageRequestHandler(cgImage: cgImage, orientation: image.cgImageOrientation)
+        // 検出専用に、コントラスト・シャープネスを強めた画像で認識精度を上げる。
+        // 書き出す画像そのものには一切影響しない（マスク合成は常に元のcgImageを使う）。
+        let detectionImage = preprocessedForDetection(cgImage) ?? cgImage
+        let handler = VNImageRequestHandler(cgImage: detectionImage, orientation: image.cgImageOrientation)
 
         // テキスト検出とバーコード検出は互いに独立させておく。
         // 一方が失敗（例: Simulatorでの.accurateモデル読み込み失敗）しても、
@@ -93,6 +97,9 @@ enum DetectionService {
             request.automaticallyDetectsLanguage = true
             request.minimumTextHeight = 0.006
             request.customWords = japaneseIdentityDocumentTerms + documentType.ocrCustomWords
+            if #available(iOS 16.0, *) {
+                request.revision = VNRecognizeTextRequestRevision3
+            }
             do {
                 try handler.perform([request])
                 for observation in request.results ?? [] {
@@ -311,8 +318,35 @@ enum DetectionService {
     private static let japaneseIdentityDocumentTerms = [
         "氏名", "住所", "生年月日", "個人番号", "運転免許証", "健康保険証",
         "旅券番号", "本籍", "有効期限", "臓器提供意思", "保険者番号", "公安委員会",
-        "免許の条件等", "取得年月日"
+        "免許の条件等", "取得年月日",
+        // 住所表記でよく使われる語をVisionの辞書に補強し、番地や建物名を
+        // 含む行の認識精度（＝結果として検出漏れの少なさ）を上げる。
+        "都道府県", "市区町村", "丁目", "番地", "号室", "マンション", "アパート",
+        "電話番号", "郵便番号", "性別", "国籍", "続柄", "世帯主", "被保険者",
+        "記号", "枝番", "資格取得年月日", "交付年月日", "発行者", "発行日"
     ]
+
+    /// 検出（Vision解析）専用にコントラストとシャープネスを強めた画像を作る。
+    /// 書き出す画像そのものは常に元のcgImageを使うため、この処理が
+    /// 最終的な書き出し結果に影響することはない。
+    /// 逆光・低コントラストな照明下で撮影された書類は、文字と背景の境界が
+    /// あいまいになりVisionの認識精度が落ちやすいため、検出前に強調する。
+    private static func preprocessedForDetection(_ cgImage: CGImage) -> CGImage? {
+        let ciImage = CIImage(cgImage: cgImage)
+        guard let contrastFilter = CIFilter(name: "CIColorControls") else { return nil }
+        contrastFilter.setValue(ciImage, forKey: kCIInputImageKey)
+        contrastFilter.setValue(1.12, forKey: kCIInputContrastKey)
+        contrastFilter.setValue(1.02, forKey: kCIInputSaturationKey)
+
+        guard let contrasted = contrastFilter.outputImage,
+              let sharpenFilter = CIFilter(name: "CISharpenLuminance") else { return nil }
+        sharpenFilter.setValue(contrasted, forKey: kCIInputImageKey)
+        sharpenFilter.setValue(0.4, forKey: kCIInputSharpnessKey)
+
+        guard let output = sharpenFilter.outputImage else { return nil }
+        let context = CIContext()
+        return context.createCGImage(output, from: ciImage.extent)
+    }
 }
 
 /// OCR結果同士の位置関係を純粋関数として検証するための軽量な表現。

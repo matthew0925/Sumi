@@ -10,6 +10,15 @@ struct ExportPreviewView: View {
     @State private var lastZoomScale: CGFloat = 1
     @State private var didSave = false
     @State private var exportedImage: UIImage?
+    @State private var pendingAction: PendingExportAction?
+    @State private var actionAfterDismiss: PendingExportAction?
+
+    private enum PendingExportAction: Equatable, Identifiable {
+        case save
+        case share
+
+        var id: Self { self }
+    }
 
     var body: some View {
         VStack(spacing: 24) {
@@ -55,7 +64,7 @@ struct ExportPreviewView: View {
             VStack(spacing: 12) {
                 HStack(spacing: 12) {
                     Button {
-                        saveToPhotos()
+                        pendingAction = .save
                     } label: {
                         Label("保存する", systemImage: "square.and.arrow.down")
                             .frame(maxWidth: .infinity)
@@ -63,11 +72,10 @@ struct ExportPreviewView: View {
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
 
-                    if let image = exportedImage {
-                        ShareLink(
-                            item: Image(uiImage: image),
-                            preview: SharePreview("Sumiで作成した画像", image: Image(uiImage: image))
-                        ) {
+                    if exportedImage != nil {
+                        Button {
+                            pendingAction = .share
+                        } label: {
                             Image(systemName: "square.and.arrow.up")
                                 .frame(width: 44, height: 44)
                         }
@@ -113,6 +121,28 @@ struct ExportPreviewView: View {
         } message: {
             Text(saveMessage ?? "")
         }
+        .fullScreenCover(item: $pendingAction) { action in
+            if let before = flow.sourceImage, let after = exportedImage {
+                FinalComparisonView(
+                    before: before,
+                    after: after,
+                    confirmTitle: action == .save ? "この内容で保存する" : "この内容で共有する"
+                ) {
+                    // ここでは即座にアクションを実行せず、フルスクリーンカバーの
+                    // dismissが完了してから実行する（共有シートの提示が
+                    // カバーの消去アニメーションと競合してエラーになるのを防ぐため）。
+                    actionAfterDismiss = action
+                }
+            }
+        }
+        .onChange(of: pendingAction) { _, newValue in
+            guard newValue == nil, let action = actionAfterDismiss else { return }
+            actionAfterDismiss = nil
+            switch action {
+            case .save: saveToPhotos()
+            case .share: shareExportedImage()
+            }
+        }
     }
 
     private func refreshExportedImage() {
@@ -128,6 +158,7 @@ struct ExportPreviewView: View {
 
     private func saveToPhotos() {
         guard let image = exportedImage else { return }
+        let fileName = ExportFileNaming.fileName(documentType: flow.documentType)
         Task {
             let authorization = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
             guard authorization == .authorized || authorization == .limited else {
@@ -139,7 +170,11 @@ struct ExportPreviewView: View {
 
             do {
                 try await PHPhotoLibrary.shared().performChanges {
-                    PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    let request = PHAssetCreationRequest.forAsset()
+                    let options = PHAssetResourceCreationOptions()
+                    options.originalFilename = fileName
+                    guard let data = image.jpegData(compressionQuality: 0.95) else { return }
+                    request.addResource(with: .photo, data: data, options: options)
                 }
                 saveFailed = false
                 saveMessage = "カメラロールに保存しました。"
@@ -152,6 +187,40 @@ struct ExportPreviewView: View {
                 Haptics.warning()
             }
         }
+    }
+
+    /// 共有シートに渡すファイル名をテンプレート通りにするため、一時領域に
+    /// ファイルとして書き出してからUIActivityViewControllerで共有する。
+    private func shareExportedImage() {
+        guard let image = exportedImage,
+              let data = image.jpegData(compressionQuality: 0.95) else { return }
+        let fileName = ExportFileNaming.fileName(documentType: flow.documentType)
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        do {
+            try data.write(to: url, options: .atomic)
+        } catch {
+            saveFailed = true
+            saveMessage = "共有用データの作成に失敗しました。"
+            Haptics.warning()
+            return
+        }
+
+        let activityController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        activityController.completionWithItemsHandler = { _, _, _, _ in
+            try? FileManager.default.removeItem(at: url)
+        }
+
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let root = scene.windows.first(where: \.isKeyWindow)?.rootViewController else { return }
+        var presenter = root
+        while let presented = presenter.presentedViewController {
+            presenter = presented
+        }
+        if let popover = activityController.popoverPresentationController {
+            popover.sourceView = presenter.view
+            popover.sourceRect = CGRect(x: presenter.view.bounds.midX, y: presenter.view.bounds.maxY, width: 0, height: 0)
+        }
+        presenter.present(activityController, animated: true)
     }
 
     private var saveAlertIsPresented: Binding<Bool> {
